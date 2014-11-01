@@ -17,12 +17,26 @@
 			#main{
 				margin: auto;
 			}
+			#mask{
+				bottom: 0px;
+				top: 0px;
+				left: 0px;
+				right: 0px;
+				text-align: center;
+				position: absolute;
+				z-index: 100;
+				background: rgba(255,0,0,0.3);
+				font-size: 100px;
+				line-height: 4em;
+				display: none;
+			}
 		</style>
 		<script>
+		    var paused = 0;
 			$(function getOne(){
-				//if($("#main tbody").children().length >= 10){
-				//	setTimeout(getOne, 200 + Math.random() * 40 - 20);
-				//}else{
+				if(paused){
+					setTimeout(getOne, 200 + Math.random() * 40 - 20);
+				}else{
 					$.getJSON("app/admin/fetch", null, function(data){
 						if(data.id !== undefined){
 							$("<tr />").append($("<td />").text(data.m))
@@ -39,7 +53,7 @@
 							getOne();
 						}
 					});
-				//}
+				}
 			});
 			$(function(){
 				$(window).keyup(function(e){
@@ -49,6 +63,9 @@
 					}else if(e.keyCode == 27 || e.keyCode == 192){
 						$("#main tr").eq(0).children().eq(2).click();
 						e.preventDefault();
+					}else if(e.keyCode == 80){
+						paused = !paused;
+						$("#mask").toggle();
 					}
 				});
 			});
@@ -56,4 +73,7 @@
 	</head>
 	<table id="main" border=1>
 	</table>
+	<div id="mask">
+	Paused
+	</div>
 </html>
