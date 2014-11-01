@@ -1,10 +1,11 @@
 var express = require('express');
 var router = express.Router();
 ClientQueue = require('../utils/clientQueue.js');
+Settings = require('../settings.js');
 
 var toProcess = [];
 var messages = [];
-var waitingClients = ClientQueue(5000);
+var waitingClients = ClientQueue(Settings.longQueryTimeout);
 var approved = [];
 
 /* GET home page. */
