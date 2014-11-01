@@ -9,25 +9,37 @@
 			.no{
 				background: red;
 			}
+			body{
+				background: black;
+				color: white;
+				font-size: 20px;
+			}
+			#main{
+				margin: auto;
+			}
 		</style>
 		<script>
 			$(function getOne(){
-				$.getJSON("app/admin/fetch", null, function(data){
-					if(data.id !== undefined){
-						$("<tr />").append($("<td />").text(data.m))
-								   .append($("<td />").text("approve").addClass("yes").click(function(){
-										$.get("app/admin/approve/" + data.id);
-										$(this).parent().remove();
-								   }))
-								   .append($("<td />").text("drop").addClass("no").click(function(){
-										$(this).parent().remove();
-								   }))
-								   .appendTo($("#main"));
-						setTimeout(getOne, 200 + Math.random() * 40 - 20);
-					}else{
-						getOne();
-					}
-				});
+				//if($("#main tbody").children().length >= 10){
+				//	setTimeout(getOne, 200 + Math.random() * 40 - 20);
+				//}else{
+					$.getJSON("app/admin/fetch", null, function(data){
+						if(data.id !== undefined){
+							$("<tr />").append($("<td />").text(data.m))
+									   .append($("<td />").text("approve").addClass("yes").click(function(){
+											$.get("app/admin/approve/" + data.id);
+											$(this).parent().remove();
+									   }))
+									   .append($("<td />").text("drop").addClass("no").click(function(){
+											$(this).parent().remove();
+									   }))
+									   .prependTo($("#main"));
+							setTimeout(getOne, 200 + Math.random() * 40 - 20);
+						}else{
+							getOne();
+						}
+					});
+				//}
 			});
 			$(function(){
 				$(window).keyup(function(e){
