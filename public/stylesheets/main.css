@@ -1,0 +1,44 @@
+.yes{
+	background: green;
+}
+.no{
+	background: red;
+}
+body{
+	background: black;
+	color: white;
+	font-size: 20px;
+}
+#main{
+	margin: auto;
+}
+#mask{
+	bottom: 0px;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	text-align: center;
+	position: absolute;
+	z-index: 100;
+	background: rgba(255,0,0,0.3);
+	font-size: 100px;
+	line-height: 4em;
+	display: none;
+}
+#toApproveContainer{
+	position: fixed;
+	right: 0px;
+	bottom: 0px;
+	max-height: 20%;
+	overflow-y: scroll;
+	font-size: 12px;
+}
+#err{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	display: none;
+}
+body{
+	overflow-y: hidden;
+}
