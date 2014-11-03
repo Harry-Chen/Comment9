@@ -36,11 +36,7 @@ app.use(session({
 //app.use('/', routes);
 app.use('/app', routes);
 
-app.use('/', function(req, res){
-	console.log(res);
-	res.end("hi");
-	console.log(res);
-});
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
