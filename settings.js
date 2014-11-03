@@ -1,5 +1,6 @@
 module.exports = {
-	db: 'coment9',
+	db: 'Comment9',
 	host: 'localhost',
-	longQueryTimeout: 5000
+	longQueryTimeout: 5000,
+	cookieSecrect: 'shankerDanMu'
 };
