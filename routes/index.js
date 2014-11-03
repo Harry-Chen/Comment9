@@ -15,24 +15,31 @@ router.get('/', function(req, res) {
 router.post('/new', function(req, res){ 
 	//接到请求，存入messages
 	//var id = messages.push(req.body.m) - 1;
-	var m = new Message({m: req.body.m});
-	m.save(function(err, newM){
-		if(err){
-			console.log("Error:");
-			console.log(err);
-			return;
-		}else{
-			//取出等待的管理员，分配给他
-			var c = waitingClients.getOne();
-			if(c !== undefined){
-				c.json({"id": newM.id, "m": newM.m});
-				c.end();
-			}else{ 
-			//如果没人在等待，放入队列
-				toProcess.push(newM.id);
+	function postOne(msg){
+		var m = new Message({m: msg.m});
+		m.save(function(err, newM){
+			if(err){
+				console.log("Error:");
+				console.log(err);
+				return;
+			}else{
+				//取出等待的管理员，分配给他
+				var c = waitingClients.getOne();
+				if(c !== undefined){
+					c.json({"id": newM.id, "m": newM.m});
+					c.end();
+				}else{ 
+				//如果没人在等待，放入队列
+					toProcess.push(newM.id);
+				}
 			}
-		}
-	});
+		});
+	};
+	if(Array.isArray(req.body)){
+		req.body.map(postOne);
+	}else{
+		postOne(req.body);
+	}
 	res.end();
 });
 
