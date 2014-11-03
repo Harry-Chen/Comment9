@@ -30,6 +30,23 @@
 				line-height: 4em;
 				display: none;
 			}
+			#toApproveContainer{
+				position: fixed;
+				right: 0px;
+				bottom: 0px;
+				max-height: 20%;
+				overflow-y: scroll;
+				font-size: 12px;
+			}
+			#err{
+				position: absolute;
+				left: 0px;
+				top: 0px;
+				display: none;
+			}
+			body{
+				overflow-y: hidden;
+			}
 		</style>
 		<script>
 		    var paused = 0;
@@ -38,42 +55,61 @@
 					setTimeout(getOne, 200 + Math.random() * 40 - 20);
 				}else{
 					$.getJSON("app/admin/fetch", null, function(data){
+						$("#err").hide();
 						if(data.id !== undefined){
 							$("<tr />").append($("<td />").text(data.m))
 									   .append($("<td />").text("approve").addClass("yes").click(function(){
-											$.get("app/admin/approve/" + data.id);
-											$(this).parent().remove();
+											var thisTr = $(this).parent().remove().appendTo("#toApprove");
+											thisTr.children().unbind("click").slice(1).remove();
+											//$("#toApproveContainer").scrollTop($("#toApprove").height() - $("#toApproveContainer").height());
+											$.get("app/admin/approve/" + data.id, function(){
+												thisTr.remove();
+												thisTr = undefined;
+											});
 									   }))
 									   .append($("<td />").text("drop").addClass("no").click(function(){
 											$(this).parent().remove();
 									   }))
 									   .prependTo($("#main"));
-							setTimeout(getOne, 200 + Math.random() * 40 - 20);
+							$(window).scrollTop(0);
+							setTimeout(getOne, 50 + Math.random() * 40 - 20);
 						}else{
-							getOne();
+							setTimeout(getOne, 0);
 						}
+					}).fail(function(){
+						$("#err").show();
+						setTimeout(getOne, 0);
 					});
 				}
 			});
 			$(function(){
-				$(window).keyup(function(e){
+				$("body").keyup(function(e){
 					if(e.keyCode == 32 || e.keyCode == 13){
-						$("#main tr").eq(0).children().eq(1).click();
 						e.preventDefault();
+						$("#main tr").eq(0).children().eq(1).click();
 					}else if(e.keyCode == 27 || e.keyCode == 192){
 						$("#main tr").eq(0).children().eq(2).click();
 						e.preventDefault();
 					}else if(e.keyCode == 80){
 						paused = !paused;
 						$("#mask").toggle();
+						e.preventDefault();
 					}
+					$(window).scrollTop(0);
 				});
 			});
 		</script>
 	</head>
 	<table id="main" border=1>
 	</table>
+	<div id="toApproveContainer">
+		<table id="toApprove" border=1>
+		</table>
+	</div>
 	<div id="mask">
 	Paused
+	</div>
+	<div id="err">
+	Connection Lost!Retrying...
 	</div>
 </html>

@@ -72,7 +72,10 @@ router.get('/admin/approve/:id', function(req, res){
 			m.approve(console.log);
 		});
 	});
-	res.end();
+	//res.end();
+	/*setTimeout(function(){
+		res.end();
+	},3000);*/
 });
 router.get('/screen', function(req, res){
 	var start = parseInt(req.query.s);
