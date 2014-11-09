@@ -42,3 +42,6 @@ body{
 body{
 	overflow-y: hidden;
 }
+#main tr:first-of-type td:first-of-type{
+	font-size: 50px;
+}
