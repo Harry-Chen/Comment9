@@ -45,6 +45,8 @@ $(function(){
 			e.preventDefault();
 		}else if(e.keyCode == 16){
 			$(".yes").removeClass('star');
+		}else if(e.keyCode == 70){
+			$("body")[0].webkitRequestFullScreen(0);
 		}
 		$(window).scrollTop(0);
 	});
@@ -53,4 +55,5 @@ $(function(){
 			$(".yes").addClass('star');
 		}
 	});
+	document.body.onwebkitfullscreenerror=function(){console.log(arguments)};
 });
