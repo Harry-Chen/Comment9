@@ -3,35 +3,41 @@ var router = express.Router();
 ClientQueue = require('../utils/clientQueue.js');
 Settings = require('../settings.js');
 var Message = require('../models/messages.js');
+var counter = require('../models/uniqueCounter.js')
 
 var toProcess = [];
 var waitingClients = ClientQueue(Settings.longQueryTimeout);
-var approved = [];
 
 /* GET home page. */
-router.get('/', function(req, res) {
-  res.render('index', { title: 'Express' });
-});
+
 router.post('/new', function(req, res){ 
 	//接到请求，存入messages
 	//var id = messages.push(req.body.m) - 1;
 	function postOne(msg){
-		var m = new Message({m: msg.m});
-		m.save(function(err, newM){
+		counter("messages", function(err, id){
 			if(err){
-				console.log("Error:");
-				console.log(err);
+				console.error(err);
+				res.status(500).end();
 				return;
 			}else{
-				//取出等待的管理员，分配给他
-				var c = waitingClients.getOne();
-				if(c !== undefined){
-					c.json({"id": newM.id, "m": newM.m});
-					c.end();
-				}else{ 
-				//如果没人在等待，放入队列
-					toProcess.push(newM.id);
-				}
+				var m = new Message({id: id, m: msg.m});
+				m.save(function(err, newM){
+					if(err){
+						console.error(err);
+						res.status(500).end();
+						return;
+					}else{
+						//取出等待的管理员，分配给他
+						var c = waitingClients.getOne();
+						if(c !== undefined){
+							c.json({"id": newM.id, "m": newM.m});
+							c.end();
+						}else{ 
+						//如果没人在等待，放入队列
+							toProcess.push(newM.id);
+						}
+					}
+				});
 			}
 		});
 	};
@@ -50,14 +56,10 @@ router.get('/admin/fetch', function(req, res){
 		waitingClients.enQueue(res);
 	}else{
 		var mid = toProcess.shift();
-		/*
-		res.json({"id": m, "m": messages[m]});
-		*/
-		Message.get({id: mid}, function(err, ret){
+		Message.find({id: mid}, function(err, ret){
 			var result;
 			if(err || ret.length == 0){
-				console.log("Error:");
-				console.log(err);
+				console.error(err);
 				result = {};
 			}else{
 				result = {
@@ -72,13 +74,7 @@ router.get('/admin/fetch', function(req, res){
 });
 
 router.get('/admin/approve/:id', function(req, res){
-	//if(messages[parseInt(req.params.id)] !== undefined){
-	Message.get({id: parseInt(req.params.id)}, function(err, ret){
-		//console.log(ret);
-		ret.map(function(m){
-			m.approve(console.log);
-		});
-	});
+	Message.approveById(parseInt(req.params.id), !!parseInt(req.query.s));
 	res.end();
 	/*setTimeout(function(){
 		res.end();
@@ -87,27 +83,24 @@ router.get('/admin/approve/:id', function(req, res){
 router.get('/screen', function(req, res){
 	var start = parseInt(req.query.s);
 	var length = parseInt(req.query.l);
-	/*res.json(approved.slice(start, start + length).map(function(id, i){
-		return {
-			"id": i + start,
-			"m": messages[id],
-		};
-	}));*/
-	Message.get({
+	Message.find({
 		id: {$gte: start},
 		approved: true
-	}, function(err, ret){
+	}, null, {
+		limit: length,
+	},function(err, ret){
 		if(err){
 			res.end("{}");
 		}
 		res.json(ret.map(function(m){
 			return {
 				id: m.id,
-				m : m.m
+				m : m.m,
+				s : m.s
 			};
 		}));
 		res.end();
-	}, length);
+	});
 });
 
 module.exports = router;

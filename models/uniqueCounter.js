@@ -1,21 +1,27 @@
 
+var mongoose = require('../utils/db.js');
 
-module.exports = function(db, name, callback){
-	db.collection('counters', function(err, collection){
+var uniqueCounterSchema = mongoose.Schema({
+    name: String,
+    seq: Number,
+});
+
+uniqueCounterSchema.set('autoIndex', false);
+
+uniqueCounterSchema.statics.getNextFor = function(name, callback){
+	if(! mongoose.connected){
+		return callback("DB not connected");
+	}
+	this.findOneAndUpdate({ name: name},{ $inc: { seq: 1 } }, {new: true, upsert: true}, function(err, doc){
 		if(err){
 			return callback(err);
 		}
-		collection.findAndModify(
-			{ _id: name },
-			[['_id', 1]],
-			{ $inc: { seq: 1 } },
-			{new: true, upsert: true},
-			function(err, ret){
-				if(err){
-					return callback(err);
-				}
-				callback(null, ret.seq);
-			}
-		);
+		callback(null, doc.seq);
 	});
+}
+
+var uniqueCounter = mongoose.model('uniqueCounter', uniqueCounterSchema);
+
+module.exports = function(name, callback){
+	uniqueCounter.getNextFor(name, callback);
 };

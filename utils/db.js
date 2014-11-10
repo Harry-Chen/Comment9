@@ -1,6 +1,8 @@
 var settings = require('../settings');
-var Db = require('mongodb').Db;
-var Connection = require('mongodb').Connection;
-var Server = require('mongodb').Server;
 
-module.exports = new Db(settings.db, new Server(settings.host, Connection.DEFAULT_PORT, {}), {safe: true});
+module.exports = mongoose = require('mongoose');
+mongoose.connected = false;
+mongoose.connection.on('open', function(){
+  mongoose.connected = true;
+});
+mongoose.connect(settings.dbAddr);
