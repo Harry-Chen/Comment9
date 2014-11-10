@@ -84,8 +84,7 @@ router.get('/screen', function(req, res){
 	var start = parseInt(req.query.s);
 	var length = parseInt(req.query.l);
 	Message.find({
-		id: {$gte: start},
-		approved: true
+		approved: {$gte: start}
 	}, null, {
 		limit: length,
 	},function(err, ret){
@@ -94,7 +93,7 @@ router.get('/screen', function(req, res){
 		}
 		res.json(ret.map(function(m){
 			return {
-				id: m.id,
+				id: m.approved,
 				m : m.m,
 				s : m.s
 			};
