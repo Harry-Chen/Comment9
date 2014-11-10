@@ -21,7 +21,7 @@ $(function getOne(){
 						   }))
 						   .prependTo($("#main"));
 				$(window).scrollTop(0);
-				setTimeout(getOne, 50 + Math.random() * 40 - 20);
+				setTimeout(getOne, Math.random() * 10);
 			}else{
 				setTimeout(getOne, 0);
 			}
