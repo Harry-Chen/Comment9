@@ -4,6 +4,10 @@
 .no{
 	background: red;
 }
+.star{
+	background: yellow;
+	color: black;
+}
 body{
 	background: black;
 	color: white;

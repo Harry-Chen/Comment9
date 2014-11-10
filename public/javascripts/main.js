@@ -7,11 +7,11 @@ $(function getOne(){
 			$("#err").hide();
 			if(data.id !== undefined){
 				$("<tr />").append($("<td />").text(data.m))
-						   .append($("<td />").text("approve").addClass("yes").click(function(e){
+						   .append($("<td />").text("approve").addClass("yes").click(function(e,shiftKey){
 								var thisTr = $(this).parent().remove().appendTo("#toApprove");
 								thisTr.children().unbind("click").slice(1).remove();
 								//$("#toApproveContainer").scrollTop($("#toApprove").height() - $("#toApproveContainer").height());
-								$.get("app/admin/approve/" + data.id + "?s=" + Number(e.metaKey), function(){
+								$.get("app/admin/approve/" + data.id + "?s=" + Number(shiftKey != false || e.shiftKey), function(){
 									thisTr.remove();
 									thisTr = undefined;
 								});
@@ -35,7 +35,7 @@ $(function(){
 	$("body").keyup(function(e){
 		if(e.keyCode == 32 || e.keyCode == 13){
 			e.preventDefault();
-			$("#main tr").eq(0).children().eq(1).click();
+			$("#main tr").eq(0).children().eq(1).trigger('click', e.shiftKey);
 		}else if(e.keyCode == 27 || e.keyCode == 192){
 			$("#main tr").eq(0).children().eq(2).click();
 			e.preventDefault();
@@ -43,7 +43,14 @@ $(function(){
 			paused = !paused;
 			$("#mask").toggle();
 			e.preventDefault();
+		}else if(e.keyCode == 16){
+			$(".yes").removeClass('star');
 		}
 		$(window).scrollTop(0);
+	});
+	$("body").keydown(function(e){
+		if(e.keyCode == 16){
+			$(".yes").addClass('star');
+		}
 	});
 });
