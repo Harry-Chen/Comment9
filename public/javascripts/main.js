@@ -7,11 +7,11 @@ $(function getOne(){
 			$("#err").hide();
 			if(data.id !== undefined){
 				$("<tr />").append($("<td />").text(data.m))
-						   .append($("<td />").text("approve").addClass("yes").click(function(){
+						   .append($("<td />").text("approve").addClass("yes").click(function(e){
 								var thisTr = $(this).parent().remove().appendTo("#toApprove");
 								thisTr.children().unbind("click").slice(1).remove();
 								//$("#toApproveContainer").scrollTop($("#toApprove").height() - $("#toApproveContainer").height());
-								$.get("app/admin/approve/" + data.id, function(){
+								$.get("app/admin/approve/" + data.id + "?s=" + Number(e.metaKey), function(){
 									thisTr.remove();
 									thisTr = undefined;
 								});
