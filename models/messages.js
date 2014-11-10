@@ -29,12 +29,12 @@ messageSchema.statics.approveById = function(id, stared, callback){
 		callback = function(){};
 	}
 	var _this=this;
-	getSeq("approve", function(err, id){
-		if(err){
+	//getSeq("approve", function(err, id){
+		/*if(err){
 			return callback(err);
-		}
-		_this.findOneAndUpdate({id: id}, {approved: id, s: !!stared}, callback);
-	});
+		}*/
+		_this.findOneAndUpdate({id: id}, {approved: Date.now(), s: !!stared}, callback);
+	//});
 }
 
 var Message = mongoose.model('Message', messageSchema);

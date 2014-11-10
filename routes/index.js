@@ -74,7 +74,11 @@ router.get('/admin/fetch', function(req, res){
 });
 
 router.get('/admin/approve/:id', function(req, res){
-	Message.approveById(parseInt(req.params.id), !!parseInt(req.query.s));
+	Message.approveById(parseInt(req.params.id), !!parseInt(req.query.s), function(err){
+		if(err){
+			console.err(err);
+		}
+	});
 	res.end();
 	/*setTimeout(function(){
 		res.end();
