@@ -36,7 +36,7 @@ $(function(){
 		if(e.keyCode == 32 || e.keyCode == 13){
 			e.preventDefault();
 			$("#main tr").eq(0).children().eq(1).trigger('click', e.shiftKey);
-		}else if(e.keyCode == 27 || e.keyCode == 192){
+		}else if(e.keyCode == 27 || e.keyCode == 8){
 			$("#main tr").eq(0).children().eq(2).click();
 			e.preventDefault();
 		}else if(e.keyCode == 80){
