@@ -11,7 +11,7 @@ $(function getOne(){
 								var thisTr = $(this).parent().remove().appendTo("#toApprove");
 								thisTr.children().unbind("click").slice(1).remove();
 								//$("#toApproveContainer").scrollTop($("#toApprove").height() - $("#toApproveContainer").height());
-								$.get("app/admin/approve/" + data.id + "?s=" + Number(shiftKey != false || e.shiftKey), function(){
+								$.get("app/admin/approve/" + data.id + "?s=" + Number(shiftKey || e.shiftKey), function(){
 									thisTr.remove();
 									thisTr = undefined;
 								});
@@ -45,6 +45,8 @@ $(function(){
 			e.preventDefault();
 		}else if(e.keyCode == 16){
 			$(".yes").removeClass('star');
+		}else if(e.keyCode == 70){
+			$("body")[0].webkitRequestFullScreen(0);
 		}
 		$(window).scrollTop(0);
 	});
@@ -53,4 +55,5 @@ $(function(){
 			$(".yes").addClass('star');
 		}
 	});
+	document.body.onwebkitfullscreenerror=function(){console.log(arguments)};
 });
