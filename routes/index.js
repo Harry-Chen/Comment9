@@ -7,6 +7,7 @@ var counter = require('../models/uniqueCounter.js')
 
 var toProcess = [];
 var waitingClients = ClientQueue(Settings.longQueryTimeout);
+var waitingScreens = ClientQueue(Settings.longQueryTimeout);
 
 /* GET home page. */
 
@@ -77,6 +78,25 @@ router.get('/admin/approve/:id', function(req, res){
 	Message.approveById(parseInt(req.params.id), !!parseInt(req.query.s), function(err){
 		if(err){
 			console.err(err);
+		}else{
+			Message.findOne({id: parseInt(req.params.id)}, function(err, m){
+				var result;
+				if(err){
+					console.error(err);
+					result = {};
+				}else{
+					result = {
+						id: m.approved,
+						m: m.m,
+						s: m.s
+					};
+				}
+				var screen;
+				while((screen = waitingScreens.getOne()) !== undefined){
+					screen.json([result]);
+					screen.end();
+				}
+			});
 		}
 	});
 	res.end();
@@ -95,14 +115,18 @@ router.get('/screen', function(req, res){
 		if(err){
 			res.end("{}");
 		}
-		res.json(ret.map(function(m){
-			return {
-				id: m.approved,
-				m : m.m,
-				s : m.s
-			};
-		}));
-		res.end();
+		if(ret.length == 0){
+			waitingScreens.enQueue(res);
+		}else{
+			res.json(ret.map(function(m){
+				return {
+					id: m.approved,
+					m : m.m,
+					s : m.s
+				};
+			}));
+			res.end();
+		}
 	});
 });
 
