@@ -39,12 +39,6 @@ $(function(){
 		}else if(e.keyCode == 27 || e.keyCode == 8){
 			$("#main tr").eq(0).children().eq(2).click();
 			e.preventDefault();
-		}else if(e.keyCode == 80){
-			paused = !paused;
-			$("#mask").toggle();
-			e.preventDefault();
-		}else if(e.keyCode == 70){
-			$("body")[0].webkitRequestFullScreen(0);
 		}
 		$(window).scrollTop(0);
 	});
@@ -56,6 +50,12 @@ $(function(){
 	$("body").keyup(function(e){
 		if(e.keyCode == 16){
 			$(".yes").removeClass('star');
+		}else if(e.keyCode == 80){
+			paused = !paused;
+			$("#mask").toggle();
+			e.preventDefault();
+		}else if(e.keyCode == 70){
+			$("body")[0].webkitRequestFullScreen(0);
 		}
 	});
 	document.body.onwebkitfullscreenerror=function(){console.log(arguments)};
