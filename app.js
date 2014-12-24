@@ -34,6 +34,23 @@ app.use(session({
 }));
 
 //app.use('/', routes);
+
+app.use('/', function(req, res, next){
+	if(req.originalUrl.match(/admin/)){
+		if(
+			(req.hostname == "c.n9.vc" && req.get('X-Forwarded-Proto') === 'https' )||
+			(req.hostname == "localhost")
+		){
+			next();
+		}else{
+			res.status(403).end();
+		}
+	}else{
+		next();
+	}
+
+});
+
 app.use('/app', routes);
 
 
