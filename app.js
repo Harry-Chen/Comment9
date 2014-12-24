@@ -25,15 +25,13 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(session({
 	secret: settings.cookieSecrect,
 	store: new MongoStore({
 		db: settings.db
 	})
 }));
-
-//app.use('/', routes);
 
 app.use('/', function(req, res, next){
 	if(req.originalUrl.match(/admin/)){
@@ -51,6 +49,8 @@ app.use('/', function(req, res, next){
 
 });
 
+app.use(express.static(path.join(__dirname, 'public')));
+//app.use('/', routes);
 app.use('/app', routes);
 
 
