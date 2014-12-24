@@ -104,6 +104,22 @@ router.get('/admin/approve/:id', function(req, res){
 		res.end();
 	},3000);*/
 });
+router.get('/admin/test', function(req, res){
+
+	var screen;
+	while((screen = waitingScreens.getOne()) !== undefined){
+		screen.json([{
+		
+			id: Date.now(),
+			m: "弹幕试机" + Date.now(),
+			s: false
+		
+		}]);
+		screen.end();
+	}
+	res.end();
+
+});
 router.get('/screen', function(req, res){
 	var start = parseInt(req.query.s);
 	var length = parseInt(req.query.l);
