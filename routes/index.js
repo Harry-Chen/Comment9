@@ -121,6 +121,7 @@ router.get('/admin/test', function(req, res){
 
 });
 router.get('/screen', function(req, res){
+	res.set('Access-Control-Allow-Origin', '*');
 	var start = parseInt(req.query.s);
 	var length = parseInt(req.query.l);
 	if(length > 20){
