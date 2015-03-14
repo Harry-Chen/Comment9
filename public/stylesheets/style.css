@@ -1,5 +1,4 @@
 body{
-	background: #000;
 }
 #text{
 	padding: 10px 9px 10px 7px;
@@ -32,7 +31,7 @@ body{
 	color: black !important;
 	font-size: 16px;
 }
-#container{
+.container{
 
 	position:absolute;
 	top:0;
@@ -40,8 +39,8 @@ body{
 	left:0;
 	right:0;
 	margin:auto;
-	height:50px;
-	width:70%;
-	text-align: center;
 	
+}
+.url-input{
+	width: 500px;
 }

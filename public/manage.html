@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Activity Management</title>
+
+<script src="javascripts/jquery.js" type="application/javascript"></script>
+<script src="javascripts/manage.js" type="application/javascript"></script>
+<link rel="stylesheet" type="text/css" href="stylesheets/style.css" />
+
+</head>
+<body>
+
+<p>
+    <select name="activitySelector" id="activitySelector"></select>
+    <a href="#" id="newActivity">+New</a>
+    <a href="#" id="deleteActivity">Delete</a>
+    <button id="logoutBtn">退出</button>
+</p>
+
+<h3>---弹幕设置---</h3>
+<p>
+<form id="configForm" action="#">
+    <input type="checkbox" id="enableLenLimit" name="enableLenLimit">
+    <label for="enableLenLimit">自动过滤超长弹幕</label>
+    <input type="text" name="lenLimit">
+    <br>
+    <input type="checkbox" id="enableKeywordFilter" name="enableKeywordFilter">
+    <label for="enableKeywordFilter">自动过滤包含敏感词弹幕</label>
+    <br>
+    <input type="checkbox" id="enableAudit" name="enableAudit">
+    <label for="enableAudit">启用人工审核</label>
+    <br>
+    <input type="submit" value="保存">
+</form>
+</p>
+<h3>---弹幕测试工具---</h3>
+<button id="testCommentBtn">发送试机弹幕</button>
+<br>
+<input type="text" placeholder="弹幕内容"><button id="manualCommentBtn">发送一条</button>
+<h3>---弹幕地址---</h3>
+<form id="urlForm">
+    审核页地址：<input type="text" class="url-input" readonly id="auditUrl" name="auditUrl">
+    <br>
+    <button data-reset="audit">重置审核地址</button>
+    <br>
+    <br>
+    弹幕客户端地址：<input type="text" class="url-input" readonly id="scrUrl" name="scrUrl">
+    <br>
+    状态墙地址：<input type="text" class="url-input" readonly id="wallUrl" name="wallUrl">
+    <br>
+    <button data-reset="client">重置弹幕显示地址</button>
+    <br>
+    <br>
+    弹幕发送API：<input type="text" class="url-input" readonly id="newCommentApiUrl" name="newCommentApiUrl">
+    <br>
+    微信公众号服务器：<input type="text" class="url-input" readonly id="wechatSvrUrl" name="wechatSvrUrl">
+    <br>
+    <button data-reset="sending">重置发送地址</button>
+    <br>
+</form>
+
+</body>
+
+</html>

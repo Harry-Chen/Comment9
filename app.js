@@ -11,7 +11,7 @@ var settings = require('./settings');
 
 
 var routes = require('./routes/index');
-//var users = require('./routes/users');
+var manage = require('./routes/manage');
 
 var app = express();
 
@@ -40,7 +40,7 @@ app.use('/', function(req, res, next){
 app.use(express.static(path.join(__dirname, 'public')));
 //app.use('/', routes);
 app.use('/app', routes);
-
+app.use('/manage', manage);
 
 
 // catch 404 and forward to error handler
