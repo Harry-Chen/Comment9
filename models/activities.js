@@ -42,7 +42,6 @@ activitySchema.statics.createActivity = function(owner, name, callback){
 	var _this=this,
 		item = new Activity({name: name, owner: owner});
 	item.tokens.screenToken = genToken();
-	item.tokens.wallToken = genToken();
 	item.tokens.sendingToken = genToken();
 	item.tokens.auditToken = genToken();
 	item.save(function(err){
