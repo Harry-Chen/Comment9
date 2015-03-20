@@ -71,6 +71,26 @@ activitySchema.statics.getActivity = function(id, callback){
 	Activity.findOne({_id: id}, callback);
 }
 
+activitySchema.statics.getActivityIdByToken = function(type, token, callback){
+	var field = null;
+	switch(type){
+	case "audit":
+		field='tokens.auditToken';
+		break;	
+	case "screen":
+		field='tokens.screenToken';
+		break;
+	case "sending":
+		field='tokens.sendingToken';
+		break;
+	}
+	if(!callback||!field)
+		return;
+	var query = {};
+	query[field] = token;
+	Activity.findOne(query, '_id', callback);
+}
+
 var Activity = mongoose.model('Activity', activitySchema);
 
 module.exports = Activity;

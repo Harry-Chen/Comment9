@@ -92,7 +92,7 @@ router.post('/activity/:id/reset/:type', checkAuth, getActivity, function(req, r
 	case "audit":
 		req.activityObj.tokens.auditToken = Activity.genToken();
 		break;	
-	case "client":
+	case "screen":
 		req.activityObj.tokens.screenToken = Activity.genToken();
 		break;
 	case "sending":

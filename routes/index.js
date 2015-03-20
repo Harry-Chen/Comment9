@@ -4,14 +4,33 @@ ClientQueue = require('../utils/clientQueue.js');
 Settings = require('../settings.js');
 var Message = require('../models/messages.js');
 var counter = require('../models/uniqueCounter.js')
+var Activity = require('../models/activities.js');
 
 var toProcess = [];
 var waitingClients = ClientQueue(Settings.longQueryTimeout);
 var waitingScreens = ClientQueue(Settings.longQueryTimeout);
 
-/* GET home page. */
+function checkToken (type, req, res, next) {
+	var token = req.query.token;
+	if(!token){
+	    res.status(403).end();
+	    return;
+	}
+	Activity.getActivityIdByToken(type, token, function(err, activity){
+		console.log(activity);
+		if(err || !activity){
+		    res.status(403).end();
+		}else{
+			req.activityId = activity._id;
+			next();
+		}
+	});
+}
 
-router.post('/new', function(req, res){ 
+
+router.post('/new', function(req, res, next){ 
+		return checkToken('sending', req, res, next);
+	}, function(req, res){ 
 	//接到请求，存入messages
 	//var id = messages.push(req.body.m) - 1;
 	function postOne(msg){
@@ -50,7 +69,9 @@ router.post('/new', function(req, res){
 	res.end();
 });
 
-router.get('/admin/fetch', function(req, res){
+router.get('/admin/fetch', function(req, res, next){ 
+		return checkToken('audit', req, res, next);
+	}, function(req, res){
 	//检查待处理队列，如果为空
 	if(toProcess.length == 0){
 		//将当前客户端放入等待队列
@@ -74,7 +95,9 @@ router.get('/admin/fetch', function(req, res){
 	}
 });
 
-router.get('/admin/approve/:id', function(req, res){
+router.get('/admin/approve/:id', function(req, res, next){ 
+		return checkToken('audit', req, res, next);
+	}, function(req, res){
 	Message.approveById(parseInt(req.params.id), !!parseInt(req.query.s), function(err){
 		if(err){
 			console.err(err);
@@ -104,7 +127,9 @@ router.get('/admin/approve/:id', function(req, res){
 		res.end();
 	},3000);*/
 });
-router.get('/admin/test', function(req, res){
+router.get('/admin/test', function(req, res, next){ 
+		return checkToken('audit', req, res, next);
+	}, function(req, res){
 
 	var screen;
 	while((screen = waitingScreens.getOne()) !== undefined){
@@ -120,7 +145,9 @@ router.get('/admin/test', function(req, res){
 	res.end();
 
 });
-router.get('/screen', function(req, res){
+router.get('/screen', function(req, res, next){ 
+		return checkToken('screen', req, res, next);
+	}, function(req, res){
 	res.set('Access-Control-Allow-Origin', '*');
 	var start = parseInt(req.query.s);
 	var length = parseInt(req.query.l);
