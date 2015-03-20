@@ -90,6 +90,10 @@ activitySchema.statics.getActivityIdByToken = function(type, token, callback){
 	Activity.findOne(query, '_id', callback);
 }
 
+activitySchema.statics.isManualAudit = function(activityId){
+    return true;
+}
+
 var Activity = mongoose.model('Activity', activitySchema);
 
 module.exports = Activity;

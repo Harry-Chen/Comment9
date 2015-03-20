@@ -91,4 +91,15 @@ $().ready(function(){
             e.preventDefault();
         }
     });
+    $('#testCommentBtn').click(function(e){
+        var testUrl = $('#testUrl').val();
+        $.get(testUrl);
+    });
+    $('#manualCommentBtn').click(function(e){
+        var content = $('#manualCommentContent').val();
+        var newCommentApiUrl = $('#newCommentApiUrl').val();
+        $.post(newCommentApiUrl, JSON.stringify({m:content}), function(ret){
+
+        });
+    });
 });

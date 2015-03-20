@@ -37,7 +37,7 @@
 <h3>---弹幕测试工具---</h3>
 <button id="testCommentBtn">发送试机弹幕</button>
 <br>
-<input type="text" placeholder="弹幕内容"><button id="manualCommentBtn">发送一条</button>
+<input type="text" id="manualCommentContent" placeholder="弹幕内容"><button id="manualCommentBtn">发送一条</button>
 <h3>---弹幕地址---</h3>
 <form id="urlForm">
     审核页地址：<input type="text" class="url-input" readonly id="auditUrl" name="auditUrl">
@@ -58,6 +58,8 @@
     <br>
     <button data-reset="sending">重置发送地址</button>
     <br>
+
+    <input type="hidden" name="testUrl" id="testUrl">
 </form>
 
 </body>

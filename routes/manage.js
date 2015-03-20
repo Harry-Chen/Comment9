@@ -15,7 +15,9 @@ function checkAuth(req, res, next) {
 
 function getActivity (req, res, next) {
 	Activity.getActivity(req.params.id, function(err, activity){
-		if(err || !activity){
+		if(err){
+			res.status(500).end();
+		}else if(!activity){
 			res.json({success: false, reason: 'activity not exist'});
 			res.end();
 		}else if(activity.owner != req.session.manage_user_id){
@@ -31,7 +33,10 @@ function getActivity (req, res, next) {
 router.post('/login', function(req, res){ 
 	var post = req.body;
 	User.userLogin(post.user, post.password, function(err, success, uid){
-		if(err || !success){
+		if(err){
+			res.status(500).end();
+		}
+		else if(!success){
 			res.json({success: false, reason: 'wrong user/password'});
 		}
 		else{
@@ -99,7 +104,8 @@ router.get('/activity/:id/urls', checkAuth, getActivity, function(req, res){
 		scrUrl: base+"/app/screen?token=" + req.activityObj.tokens.screenToken,
 		wallUrl: base+"/wall.html?token=" + req.activityObj.tokens.screenToken,
 		auditUrl: base+"/admin.html?token=" + req.activityObj.tokens.auditToken,
-		newCommentApiUrl: base+"/api/new?token=" + req.activityObj.tokens.sendingToken,
+		testUrl: base+"/app/admin/test?token=" + req.activityObj.tokens.auditToken,
+		newCommentApiUrl: base+"/app/new?token=" + req.activityObj.tokens.sendingToken,
 		wechatSvrUrl: base+"/wechat/comment/" + req.activityObj.tokens.sendingToken,
 	};
 	res.json({success: true, urls: urls});

@@ -5,6 +5,7 @@ Settings = require('../settings.js');
 var Message = require('../models/messages.js');
 var counter = require('../models/uniqueCounter.js')
 var Activity = require('../models/activities.js');
+var messageFilter = require('../models/messageFilter.js');
 
 var toProcess = [];
 var waitingClients = ClientQueue(Settings.longQueryTimeout);
@@ -17,8 +18,9 @@ function checkToken (type, req, res, next) {
 	    return;
 	}
 	Activity.getActivityIdByToken(type, token, function(err, activity){
-		console.log(activity);
-		if(err || !activity){
+		if(err){
+		    res.status(500).end();
+		}else if(!activity){
 		    res.status(403).end();
 		}else{
 			req.activityId = activity._id;
@@ -27,6 +29,30 @@ function checkToken (type, req, res, next) {
 	});
 }
 
+function pushToScreens (approved, content, star) {
+	
+	var screen, result = {
+		id: approved,
+		m: content,
+		s: star
+	};
+	while((screen = waitingScreens.getOne()) !== undefined){
+		screen.json([result]);
+		screen.end();
+	}
+}
+
+function pushToAuditors (id, content) {
+	//取出等待的管理员，分配给他
+	var c = waitingClients.getOne();
+	if(c !== undefined){
+		c.json({"id": id, "m": content});
+		c.end();
+	}else{ 
+		//如果没人在等待，放入队列
+		toProcess.push(id);
+	}
+}
 
 router.post('/new', function(req, res, next){ 
 		return checkToken('sending', req, res, next);
@@ -40,21 +66,27 @@ router.post('/new', function(req, res, next){
 				res.status(500).end();
 				return;
 			}else{
-				var m = new Message({id: id, m: msg.m});
+				var m = new Message({id: id, m: msg.m, activity: req.activityId});
+				//对消息应用自动过滤器
+				var state = messageFilter.filter(req.activityId, msg.m);
+				if(state < 0)
+					m.approved = state; //被自动屏蔽
+				else if(!Activity.isManualAudit(req.activityId))
+					m.approved = Date.now(); //无人工审核则自动设置为通过
+				else
+					m.approved = 0;
 				m.save(function(err, newM){
 					if(err){
 						console.error(err);
 						res.status(500).end();
 						return;
 					}else{
-						//取出等待的管理员，分配给他
-						var c = waitingClients.getOne();
-						if(c !== undefined){
-							c.json({"id": newM.id, "m": newM.m});
-							c.end();
-						}else{ 
-						//如果没人在等待，放入队列
-							toProcess.push(newM.id);
+						res.end();
+						//需要人工审核
+						if(newM.approved == 0){
+							pushToAuditors(newM.id, newM.m);
+						}else if(newM.approved > 0){
+							pushToScreens(newM.approved, newM.m, false);
 						}
 					}
 				});
@@ -66,7 +98,6 @@ router.post('/new', function(req, res, next){
 	}else{
 		postOne(req.body);
 	}
-	res.end();
 });
 
 router.get('/admin/fetch', function(req, res, next){ 
@@ -103,21 +134,10 @@ router.get('/admin/approve/:id', function(req, res, next){
 			console.err(err);
 		}else{
 			Message.findOne({id: parseInt(req.params.id)}, function(err, m){
-				var result;
 				if(err){
 					console.error(err);
-					result = {};
 				}else{
-					result = {
-						id: m.approved,
-						m: m.m,
-						s: m.s
-					};
-				}
-				var screen;
-				while((screen = waitingScreens.getOne()) !== undefined){
-					screen.json([result]);
-					screen.end();
+					pushToScreens(m.approved, m.m, m.s);
 				}
 			});
 		}
@@ -131,19 +151,8 @@ router.get('/admin/test', function(req, res, next){
 		return checkToken('audit', req, res, next);
 	}, function(req, res){
 
-	var screen;
-	while((screen = waitingScreens.getOne()) !== undefined){
-		screen.json([{
-		
-			id: Date.now(),
-			m: "弹幕试机" + Date.now(),
-			s: false
-		
-		}]);
-		screen.end();
-	}
 	res.end();
-
+	pushToScreens(Date.now(), "弹幕试机" + Date.now(), false);
 });
 router.get('/screen', function(req, res, next){ 
 		return checkToken('screen', req, res, next);

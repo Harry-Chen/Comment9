@@ -7,22 +7,9 @@ var messageSchema = mongoose.Schema({
     m: String,
     approved: {type: Number, default: 0},
     s: {type: Boolean, default: false},
+    received: {type: Date, default: Date.now},
+    activity: mongoose.Schema.Types.ObjectId,
 });
-
-messageSchema.methods.approve = function(stared, callback){
-	var _this = this;
-	getSeq("approve", function(err, id){
-		if(err){
-			return callback(err);
-		}
-		_this.approved = id;
-		_this.s = !!stared;
-		if(!callback){
-			callback = function(){};
-		}
-		_this.save(callback);
-	});
-};
 
 messageSchema.statics.approveById = function(id, stared, callback){
 	if(!callback){
