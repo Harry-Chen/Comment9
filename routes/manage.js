@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var settings = require('../settings.js');
 var Activity = require('../models/activities.js');
+var User = require('../models/users.js');
 
 function checkAuth(req, res, next) {
   if (!req.session.manage_user_id) {
@@ -17,6 +18,9 @@ function getActivity (req, res, next) {
 		if(err || !activity){
 			res.json({success: false, reason: 'activity not exist'});
 			res.end();
+		}else if(activity.owner != req.session.manage_user_id){
+			res.json({success: false, reason: 'permission denied'});
+			res.end();
 		}else{
 			req.activityObj = activity;
 			next();
@@ -26,11 +30,25 @@ function getActivity (req, res, next) {
 
 router.post('/login', function(req, res){ 
 	var post = req.body;
-	if (post.user === 'john' && post.password === 'johnspassword') {
-		req.session.manage_user_id = 1;
-		res.json({success: true});
+	User.userLogin(post.user, post.password, function(err, success, uid){
+		if(err || !success){
+			res.json({success: false, reason: 'wrong user/password'});
+		}
+		else{
+			req.session.manage_user_id = uid;
+			res.json({success: true});
+		}
+	});
+});
+
+router.post('/reg', function(req, res){ 
+	var post = req.body;
+	if (post.user && post.password && /\w+/.test(post.user)) {
+		User.createUser(post.user, post.password, function(err, uid){
+			res.json({success: err==null});
+		});
 	} else {
-		res.json({success: false, reason: 'wrong user/password'});
+		res.json({success: false, reason: 'invalid user/password'});
 	}
 });
 
