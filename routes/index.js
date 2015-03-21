@@ -68,7 +68,7 @@ router.post('/new', checkToken('sending'), function(req, res){
 			}else{
 				var msgObj = new Message({id: id, m: msg.m, activity: req.activity.getId()});
 				//对消息应用自动过滤器
-				var state = messageFilter.filter(req.activity.getId(), msgObj.m);
+				var state = messageFilter.filter(req.activity, msgObj.m);
 				if(state < 0)
 					msgObj.approved = state; //被自动屏蔽
 				else if(!req.activity.isManualAudit())
@@ -147,9 +147,7 @@ router.get('/admin/test', checkToken('audit'), function(req, res){
   res.end();
   pushToScreens(Date.now(), "弹幕试机" + Date.now(), false);
 });
-router.get('/screen', function(req, res, next){ 
-    return checkToken('screen', req, res, next);
-  }, function(req, res){
+router.get('/screen', checkToken('screen'), function(req, res){
   res.set('Access-Control-Allow-Origin', '*');
   var start = parseInt(req.query.s);
   var length = parseInt(req.query.l);
@@ -163,6 +161,7 @@ router.get('/screen', function(req, res, next){
   },function(err, ret){
     if(err){
       res.end("{}");
+      return;
     }
     if(ret.length == 0){
       waitingScreens.enQueue(req.activity.getId(), res);
