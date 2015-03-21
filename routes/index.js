@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
-ClientQueue = require('../utils/clientQueue.js');
-Settings = require('../settings.js');
-var Message = require('../models/messages.js');
-var counter = require('../models/uniqueCounter.js')
-var Activity = require('../models/activities.js');
-var messageFilter = require('../models/messageFilter.js');
+ClientQueue = require('../utils/clientQueue');
+Settings = require('../settings');
+var Message = require('../models/messages');
+var counter = require('../models/uniqueCounter')
+var Activity = require('../models/activities');
+var messageFilter = require('../models/messageFilter');
 
 var toProcess = [];
 var waitingClients = ClientQueue(Settings.longQueryTimeout);
