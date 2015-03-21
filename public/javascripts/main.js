@@ -1,9 +1,22 @@
 var paused = 0;
+function getUrlParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) 
+        {
+            return sParameterName[1];
+        }
+    }
+} 
 $(function getOne(){
 	if(paused){
 		setTimeout(getOne, 200 + Math.random() * 40 - 20);
 	}else{
-		$.getJSON("app/admin/fetch", null, function(data){
+		$.getJSON("app/admin/fetch?token="+getUrlParameter('token'), null, function(data){
 			$("#err").hide();
 			if(data.id !== undefined){
 				$("<tr />").append($("<td />").text(data.m))
@@ -11,7 +24,7 @@ $(function getOne(){
 								var thisTr = $(this).parent().remove().appendTo("#toApprove");
 								thisTr.children().unbind("click").slice(1).remove();
 								//$("#toApproveContainer").scrollTop($("#toApprove").height() - $("#toApproveContainer").height());
-								$.get("app/admin/approve/" + data.id + "?s=" + Number(shiftKey || e.shiftKey), function(){
+								$.get("app/admin/approve/" + data.id + "?s=" + Number(shiftKey || e.shiftKey) + "&token=" + getUrlParameter('token'), function(){
 									thisTr.remove();
 									thisTr = undefined;
 								});
