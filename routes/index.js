@@ -23,7 +23,7 @@ function checkToken (type, req, res, next) {
 		}else if(!activity){
 		    res.status(403).end();
 		}else{
-			req.activityId = activity._id;
+			req.activity = activity;
 			next();
 		}
 	});
@@ -66,16 +66,16 @@ router.post('/new', function(req, res, next){
 				res.status(500).end();
 				return;
 			}else{
-				var m = new Message({id: id, m: msg.m, activity: req.activityId});
+				var msgObj = new Message({id: id, m: msg.m, activity: req.activity.getId()});
 				//对消息应用自动过滤器
-				var state = messageFilter.filter(req.activityId, msg.m);
+				var state = messageFilter.filter(req.activity.getId(), msgObj.m);
 				if(state < 0)
-					m.approved = state; //被自动屏蔽
-				else if(!Activity.isManualAudit(req.activityId))
-					m.approved = Date.now(); //无人工审核则自动设置为通过
+					msgObj.approved = state; //被自动屏蔽
+				else if(!req.activity.isManualAudit())
+					msgObj.approved = Date.now(); //无人工审核则自动设置为通过
 				else
-					m.approved = 0;
-				m.save(function(err, newM){
+					msgObj.approved = 0;
+				msgObj.save(function(err, newM){
 					if(err){
 						console.error(err);
 						res.status(500).end();
