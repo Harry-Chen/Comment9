@@ -6,9 +6,9 @@ module.exports = WTF = ()->
   
 WTF::insert = (key, value)->
   @queue.push {key: key, value: value}
-
+  
 WTF::findAndRemove = (key)->
-  for i in [0..@queue.length]
+  for i in [0..@queue.length - 1] by 1
     if @queue[i].key is key
       v = @queue[i].value
       @queue.splice(i, 1)

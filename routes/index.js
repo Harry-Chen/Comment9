@@ -104,7 +104,7 @@ router.get('/admin/fetch', checkToken('audit'), function(req, res){
   //检查待处理队列，如果为空
   if(toProcess.length == 0){
     //将当前客户端放入等待队列
-    waitingClients.enQueue(res, req.activity.getId());
+    waitingClients.enQueue(req.activity.getId(), res);
   }else{
     var mid = toProcess.shift();
     Message.find({id: mid}, function(err, ret){
@@ -133,7 +133,7 @@ router.get('/admin/approve/:id', checkToken('audit'), function(req, res){
         if(err){
           console.error(err);
         }else{
-          pushToScreens(m.approved, m.m, m.s);
+          pushToScreens(m.approved, m.m, m.s, req.activity.getId());
         }
       });
     }
@@ -165,7 +165,7 @@ router.get('/screen', function(req, res, next){
       res.end("{}");
     }
     if(ret.length == 0){
-      waitingScreens.enQueue(res, req.activity.getId());
+      waitingScreens.enQueue(req.activity.getId(), res);
     }else{
       res.json(ret.map(function(m){
         return {

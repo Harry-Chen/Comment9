@@ -40,7 +40,7 @@ activitySchema.methods.isManualAudit = function(){
 }
 
 activitySchema.methods.getId = function(){
-    return this._id;
+    return this._id.toString();
 }
 
 activitySchema.statics.createActivity = function(owner, name, callback){

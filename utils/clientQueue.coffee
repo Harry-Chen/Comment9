@@ -9,6 +9,7 @@ module.exports = (timeout)->
         timer: setTimeout ()->
           client.json({})
           client.end()
+          queue.findAndRemove aid
         , timeout
       )
     getOne: (aid)->
