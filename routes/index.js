@@ -24,29 +24,29 @@ function checkToken (type){
       }else if(!activity){
           res.status(403).end();
       }else{
-			req.activity = activity;
+        req.activity = activity;
         next();
       }
     });
   }
 }
 
-function pushToScreens (approved, content, star) {
+function pushToScreens (approved, content, star, aid) {
   
   var screen, result = {
     id: approved,
     m: content,
     s: star
   };
-  while((screen = waitingScreens.getOne()) !== undefined){
+  while((screen = waitingScreens.getOne(aid)) !== undefined){
     screen.json([result]);
     screen.end();
   }
 }
 
-function pushToAuditors (id, content) {
+function pushToAuditors (id, content, aid) {
   //取出等待的管理员，分配给他
-  var c = waitingClients.getOne();
+  var c = waitingClients.getOne(aid);
   if(c !== undefined){
     c.json({"id": id, "m": content});
     c.end();
@@ -84,9 +84,9 @@ router.post('/new', checkToken('sending'), function(req, res){
 						res.end();
 						//需要人工审核
 						if(newM.approved == 0){
-							pushToAuditors(newM.id, newM.m);
+							pushToAuditors(newM.id, newM.m, req.activity.getId());
 						}else if(newM.approved > 0){
-							pushToScreens(newM.approved, newM.m, false);
+							pushToScreens(newM.approved, newM.m, false, req.activity.getId());
 						}
 					}
 				});
@@ -104,7 +104,7 @@ router.get('/admin/fetch', checkToken('audit'), function(req, res){
   //检查待处理队列，如果为空
   if(toProcess.length == 0){
     //将当前客户端放入等待队列
-    waitingClients.enQueue(res);
+    waitingClients.enQueue(res, req.activity.getId());
   }else{
     var mid = toProcess.shift();
     Message.find({id: mid}, function(err, ret){
@@ -165,7 +165,7 @@ router.get('/screen', function(req, res, next){
       res.end("{}");
     }
     if(ret.length == 0){
-      waitingScreens.enQueue(res);
+      waitingScreens.enQueue(res, req.activity.getId());
     }else{
       res.json(ret.map(function(m){
         return {
