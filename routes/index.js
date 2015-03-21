@@ -68,7 +68,7 @@ router.post('/new', checkToken('sending'), function(req, res){
 			}else{
 				var msgObj = new Message({id: id, m: msg.m, activity: req.activity.getId()});
 				//对消息应用自动过滤器
-				var state = messageFilter.filter(req.activity.getId(), msgObj.m);
+				var state = messageFilter.filter(req.activity, msgObj.m);
 				if(state < 0)
 					msgObj.approved = state; //被自动屏蔽
 				else if(!req.activity.isManualAudit())

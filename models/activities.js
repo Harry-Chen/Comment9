@@ -43,6 +43,19 @@ activitySchema.methods.getId = function(){
     return this._id;
 }
 
+activitySchema.methods.getEnabledFilters = function(lenFilter, keywordFilter){
+    var enabled = [];
+    var _this = this;
+    if(_this.config.enableLenLimit){
+        enabled.push(function(content){
+            return lenFilter(content, _this.config.lenLimit);
+        });
+    }
+    if(_this.config.enableKeywordFilter)
+        enabled.push(keywordFilter);
+    return enabled;
+}
+
 activitySchema.statics.createActivity = function(owner, name, callback){
 	if(!callback){
 		callback = function(){};
