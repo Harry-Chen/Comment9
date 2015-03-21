@@ -35,6 +35,14 @@ activitySchema.methods.updateConfig = function(config, callback){
 	_this.save(callback);
 };
 
+activitySchema.methods.isManualAudit = function(){
+    return this.config.enableAudit;
+}
+
+activitySchema.methods.getId = function(){
+    return this._id;
+}
+
 activitySchema.statics.createActivity = function(owner, name, callback){
 	if(!callback){
 		callback = function(){};
@@ -87,11 +95,7 @@ activitySchema.statics.getActivityIdByToken = function(type, token, callback){
 		return;
 	var query = {};
 	query[field] = token;
-	Activity.findOne(query, '_id', callback);
-}
-
-activitySchema.statics.isManualAudit = function(activityId){
-    return true;
+	Activity.findOne(query, callback);
 }
 
 var Activity = mongoose.model('Activity', activitySchema);

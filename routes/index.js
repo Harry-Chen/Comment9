@@ -24,7 +24,7 @@ function checkToken (type){
       }else if(!activity){
           res.status(403).end();
       }else{
-        req.activityId = activity._id;
+			req.activity = activity;
         next();
       }
     });
@@ -57,47 +57,47 @@ function pushToAuditors (id, content) {
 }
 
 router.post('/new', checkToken('sending'), function(req, res){ 
-  //接到请求，存入messages
-  //var id = messages.push(req.body.m) - 1;
-  function postOne(msg){
-    counter("messages", function(err, id){
-      if(err){
-        console.error(err);
-        res.status(500).end();
-        return;
-      }else{
-        var m = new Message({id: id, m: msg.m, activity: req.activityId});
-        //对消息应用自动过滤器
-        var state = messageFilter.filter(req.activityId, msg.m);
-        if(state < 0)
-          m.approved = state; //被自动屏蔽
-        else if(!Activity.isManualAudit(req.activityId))
-          m.approved = Date.now(); //无人工审核则自动设置为通过
-        else
-          m.approved = 0;
-        m.save(function(err, newM){
-          if(err){
-            console.error(err);
-            res.status(500).end();
-            return;
-          }else{
-            res.end();
-            //需要人工审核
-            if(newM.approved == 0){
-              pushToAuditors(newM.id, newM.m);
-            }else if(newM.approved > 0){
-              pushToScreens(newM.approved, newM.m, false);
-            }
-          }
-        });
-      }
-    });
-  };
-  if(Array.isArray(req.body)){
-    req.body.map(postOne);
-  }else{
-    postOne(req.body);
-  }
+	//接到请求，存入messages
+	//var id = messages.push(req.body.m) - 1;
+	function postOne(msg){
+		counter("messages", function(err, id){
+			if(err){
+				console.error(err);
+				res.status(500).end();
+				return;
+			}else{
+				var msgObj = new Message({id: id, m: msg.m, activity: req.activity.getId()});
+				//对消息应用自动过滤器
+				var state = messageFilter.filter(req.activity.getId(), msgObj.m);
+				if(state < 0)
+					msgObj.approved = state; //被自动屏蔽
+				else if(!req.activity.isManualAudit())
+					msgObj.approved = Date.now(); //无人工审核则自动设置为通过
+				else
+					msgObj.approved = 0;
+				msgObj.save(function(err, newM){
+					if(err){
+						console.error(err);
+						res.status(500).end();
+						return;
+					}else{
+						res.end();
+						//需要人工审核
+						if(newM.approved == 0){
+							pushToAuditors(newM.id, newM.m);
+						}else if(newM.approved > 0){
+							pushToScreens(newM.approved, newM.m, false);
+						}
+					}
+				});
+			}
+		});
+	};
+	if(Array.isArray(req.body)){
+		req.body.map(postOne);
+	}else{
+		postOne(req.body);
+	}
 });
 
 router.get('/admin/fetch', checkToken('audit'), function(req, res){

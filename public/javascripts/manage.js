@@ -98,8 +98,14 @@ $().ready(function(){
     $('#manualCommentBtn').click(function(e){
         var content = $('#manualCommentContent').val();
         var newCommentApiUrl = $('#newCommentApiUrl').val();
-        $.post(newCommentApiUrl, JSON.stringify({m:content}), function(ret){
-
+        $.ajax({
+          url:newCommentApiUrl,
+          type:"POST",
+          data: JSON.stringify({m:content}),
+          contentType:"application/json; charset=utf-8",
+          dataType:"json",
+          success: function(){
+          }
         });
     });
 });
