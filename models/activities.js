@@ -11,6 +11,11 @@ var activitySchema = mongoose.Schema({
     	lenLimit: {type: Number, default: 30},
     	enableKeywordFilter: {type: Boolean, default: false},
     	enableAudit: {type: Boolean, default: false},
+        wechatParams: {
+            wechatToken: String,
+            wechatAppid: String,
+            wechatAESKey: String,
+        },
     },
     tokens: {
     	screenToken: { type: String, index: true, unique: true},
@@ -26,6 +31,15 @@ activitySchema.statics.genToken = genToken = function () {
 	return hash.digest('hex')
 }
 
+activitySchema.methods.getWechatConfig = function(){
+    //structure defined by wechat module
+    return {
+        token: this.config.wechatParams.wechatToken,
+        appid: this.config.wechatParams.wechatAppid,
+        encodingAESKey: this.config.wechatParams.wechatAESKey
+    };
+}
+
 activitySchema.methods.updateConfig = function(config, callback){
 	var _this = this;
 	_this.config.enableLenLimit = config.enableLenLimit;
@@ -33,6 +47,14 @@ activitySchema.methods.updateConfig = function(config, callback){
 	_this.config.enableKeywordFilter = config.enableKeywordFilter;
 	_this.config.enableAudit = config.enableAudit;
 	_this.save(callback);
+};
+
+activitySchema.methods.updateWechatConfig = function(config, callback){
+    var _this = this;
+    _this.config.wechatParams.wechatToken = config.wechatToken;
+    _this.config.wechatParams.wechatAppid = config.wechatAppid;
+    _this.config.wechatParams.wechatAESKey = config.wechatAESKey;
+    _this.save(callback);
 };
 
 activitySchema.methods.isManualAudit = function(){

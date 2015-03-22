@@ -98,6 +98,16 @@ router.post('/activity/:id/config', checkAuth, getActivity, function(req, res){
 	});
 });
 
+router.get('/activity/:id/wechat', checkAuth, getActivity, function(req, res){
+	res.json({success: true, wechat: req.activityObj.config.wechatParams});
+});
+
+router.post('/activity/:id/wechat', checkAuth, getActivity, function(req, res){
+	req.activityObj.updateWechatConfig(req.body, function(err){
+		res.json({success: !err});
+	});
+});
+
 router.get('/activity/:id/urls', checkAuth, getActivity, function(req, res){
 	var base = req.protocol + '://' + req.get('host');
 	var urls={
@@ -106,7 +116,7 @@ router.get('/activity/:id/urls', checkAuth, getActivity, function(req, res){
 		auditUrl: base+"/admin.html?token=" + req.activityObj.tokens.auditToken,
 		testUrl: base+"/app/admin/test?token=" + req.activityObj.tokens.auditToken,
 		newCommentApiUrl: base+"/app/new?token=" + req.activityObj.tokens.sendingToken,
-		wechatSvrUrl: base+"/wechat/comment/" + req.activityObj.tokens.sendingToken,
+		wechatSvrUrl: base+"/app/wechat/comment/" + req.activityObj.tokens.sendingToken,
 	};
 	res.json({success: true, urls: urls});
 });

@@ -44,3 +44,6 @@ body{
 .url-input{
 	width: 500px;
 }
+.hide{
+	display: none;
+}

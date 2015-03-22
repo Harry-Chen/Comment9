@@ -54,14 +54,19 @@
     <br>
     弹幕发送API：<input type="text" class="url-input" readonly id="newCommentApiUrl" name="newCommentApiUrl">
     <br>
-    微信公众号服务器：<input type="text" class="url-input" readonly id="wechatSvrUrl" name="wechatSvrUrl">
+    微信公众号服务器：<input type="text" class="url-input" readonly id="wechatSvrUrl" name="wechatSvrUrl"><a href="#" id="openWechatSettings">设置公众号参数</a>
     <br>
     <button data-reset="sending">重置发送地址</button>
     <br>
 
     <input type="hidden" name="testUrl" id="testUrl">
 </form>
-
+<form action="#" class="hide" id="wechatSettings">
+    Appid <input type="text" name="wechatAppid"><br>
+    Token <input type="text" name="wechatToken"><br>
+    EncodingAESKey <input type="text" name="wechatAESKey"><br>
+    <input type="submit">
+</form>
 </body>
 
 </html>

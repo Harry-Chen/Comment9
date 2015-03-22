@@ -108,4 +108,23 @@ $().ready(function(){
           }
         });
     });
+    $('#openWechatSettings').click(function(e){
+        var id = $('#activitySelector').val();
+        $.get('manage/activity/'+id+'/wechat', function(result){
+            if(result.success){
+                populate($('#wechatSettings').show(), result.wechat);
+            }
+        });
+        e.preventDefault();
+    });
+    $('#wechatSettings').submit(function(e){
+        e.preventDefault();
+        var id = $('#activitySelector').val();
+        var form = this;
+        $.post('manage/activity/'+id+'/wechat', $(form).serialize(), function(result){
+            if(result.success){
+                $(form).hide();
+            }
+        }, 'json');
+    });
 });

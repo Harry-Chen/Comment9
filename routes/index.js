@@ -7,6 +7,7 @@ var counter = require('../models/uniqueCounter')
 var Activity = require('../models/activities');
 var messageFilter = require('../models/messageFilter');
 var WTF = require('../utils/WTFTree');
+var wechat = require('wechat');
 
 var toProcess = new WTF;
 var waitingClients = ClientQueue(Settings.longQueryTimeout);
@@ -14,7 +15,7 @@ var waitingScreens = ClientQueue(Settings.longQueryTimeout);
 
 function checkToken (type){
   return function(req, res, next) {
-    var token = req.query.token;
+    var token = req.params.token || req.query.token;
     if(!token){
         res.status(403).end();
         return;
@@ -57,47 +58,62 @@ function pushToAuditors (id, content, aid) {
   }
 }
 
+//接到请求，存入messages
+function postOne(req, res, msg){
+  console.log(msg);
+  counter("messages", function(err, id){
+    if(err){
+      console.error(err);
+      res.status(500).end();
+      return;
+    }else{
+      var msgObj = new Message({id: id, m: msg.m, activity: req.activity.getId()});
+      //对消息应用自动过滤器
+      var state = messageFilter.filter(req.activity, msgObj.m);
+      if(state < 0)
+        msgObj.approved = state; //被自动屏蔽
+      else if(!req.activity.isManualAudit())
+        msgObj.approved = Date.now(); //无人工审核则自动设置为通过
+      else
+        msgObj.approved = 0;
+      msgObj.save(function(err, newM){
+        if(err){
+          console.error(err);
+          res.status(500).end();
+          return;
+        }else{
+          res.end();
+          //需要人工审核
+          if(newM.approved == 0){
+            pushToAuditors(newM.id, newM.m, req.activity.getId());
+          }else if(newM.approved > 0){
+            pushToScreens(newM.approved, newM.m, false, req.activity.getId());
+          }
+        }
+      });
+    }
+  });
+};
+
+router.all('/wechat/comment/:token', checkToken('sending'), function(req, res, next){
+
+  var middleware = wechat(req.activity.getWechatConfig(), function (req, res, next) {
+    // 微信输入信息都在req.weixin上
+    var message = req.weixin;
+    console.log(message);
+    postOne(req, res, {m: message.Content});
+    res.reply('弹幕发送成功');
+  });
+  return middleware(req, res, next);
+});
+
 router.post('/new', checkToken('sending'), function(req, res){ 
-	//接到请求，存入messages
-	//var id = messages.push(req.body.m) - 1;
-	function postOne(msg){
-		counter("messages", function(err, id){
-			if(err){
-				console.error(err);
-				res.status(500).end();
-				return;
-			}else{
-				var msgObj = new Message({id: id, m: msg.m, activity: req.activity.getId()});
-				//对消息应用自动过滤器
-				var state = messageFilter.filter(req.activity, msgObj.m);
-				if(state < 0)
-					msgObj.approved = state; //被自动屏蔽
-				else if(!req.activity.isManualAudit())
-					msgObj.approved = Date.now(); //无人工审核则自动设置为通过
-				else
-					msgObj.approved = 0;
-				msgObj.save(function(err, newM){
-					if(err){
-						console.error(err);
-						res.status(500).end();
-						return;
-					}else{
-						res.end();
-						//需要人工审核
-						if(newM.approved == 0){
-							pushToAuditors(newM.id, newM.m, req.activity.getId());
-						}else if(newM.approved > 0){
-							pushToScreens(newM.approved, newM.m, false, req.activity.getId());
-						}
-					}
-				});
-			}
-		});
-	};
 	if(Array.isArray(req.body)){
-		req.body.map(postOne);
+    for (var i = 0; i < req.body.length; i++) {
+      postOne(req, res, req.body[i]);
+    };
 	}else{
-		postOne(req.body);
+		postOne(req, res, req.body);
 	}
 });
 
