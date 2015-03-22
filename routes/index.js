@@ -125,7 +125,7 @@ router.get('/admin/fetch', checkToken('audit'), function(req, res){
 });
 
 router.get('/admin/approve/:id', checkToken('audit'), function(req, res){
-  Message.approveById(parseInt(req.params.id), !!parseInt(req.query.s), function(err){
+  Message.approveById(parseInt(req.params.id), !!parseInt(req.query.s), req.activity.getId(), function(err){
     if(err){
       console.err(err);
     }else{
@@ -145,7 +145,7 @@ router.get('/admin/approve/:id', checkToken('audit'), function(req, res){
 });
 router.get('/admin/test', checkToken('audit'), function(req, res){
   res.end();
-  pushToScreens(Date.now(), "弹幕试机" + Date.now(), false);
+  pushToScreens(Date.now(), "弹幕试机" + Date.now(), false, req.activity.getId());
 });
 router.get('/screen', checkToken('screen'), function(req, res){
   res.set('Access-Control-Allow-Origin', '*');
@@ -155,7 +155,8 @@ router.get('/screen', checkToken('screen'), function(req, res){
     length = 20;
   }
   Message.find({
-    approved: {$gte: start}
+    approved: {$gte: start},
+    activity: req.activity.getId(),
   }, null, {
     limit: length,
   },function(err, ret){

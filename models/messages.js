@@ -11,12 +11,12 @@ var messageSchema = mongoose.Schema({
     activity: mongoose.Schema.Types.ObjectId,
 });
 
-messageSchema.statics.approveById = function(id, stared, callback){
+messageSchema.statics.approveById = function(id, stared, aid, callback){
 	if(!callback){
 		callback = function(){};
 	}
 	var _this=this;
-	_this.findOneAndUpdate({id: id}, {approved: Date.now(), s: !!stared}, callback);
+	_this.findOneAndUpdate({id: id, activity: aid}, {approved: Date.now(), s: !!stared}, callback);
 }
 
 var Message = mongoose.model('Message', messageSchema);
