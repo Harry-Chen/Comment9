@@ -6,8 +6,9 @@ var Message = require('../models/messages');
 var counter = require('../models/uniqueCounter')
 var Activity = require('../models/activities');
 var messageFilter = require('../models/messageFilter');
+var WTF = require('../utils/WTFTree');
 
-var toProcess = [];
+var toProcess = new WTF;
 var waitingClients = ClientQueue(Settings.longQueryTimeout);
 var waitingScreens = ClientQueue(Settings.longQueryTimeout);
 
@@ -52,7 +53,7 @@ function pushToAuditors (id, content, aid) {
     c.end();
   }else{ 
     //如果没人在等待，放入队列
-    toProcess.push(id);
+    toProcess.insert(aid, id);
   }
 }
 
@@ -101,12 +102,12 @@ router.post('/new', checkToken('sending'), function(req, res){
 });
 
 router.get('/admin/fetch', checkToken('audit'), function(req, res){
+  var mid = toProcess.findAndRemove(req.activity.getId());
   //检查待处理队列，如果为空
-  if(toProcess.length == 0){
+  if(mid === undefined){
     //将当前客户端放入等待队列
     waitingClients.enQueue(req.activity.getId(), res);
   }else{
-    var mid = toProcess.shift();
     Message.find({id: mid}, function(err, ret){
       var result;
       if(err || ret.length == 0){
