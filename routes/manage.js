@@ -108,6 +108,16 @@ router.post('/activity/:id/wechat', checkAuth, getActivity, function(req, res){
 	});
 });
 
+router.get('/activity/:id/forbidden', checkAuth, getActivity, function(req, res){
+	res.json({success: true, forbidden: req.activityObj.forbiddenWordList});
+});
+
+router.post('/activity/:id/forbidden', checkAuth, getActivity, function(req, res){
+	req.activityObj.updateForbiddenWords(req.body, function(err){
+		res.json({success: !err});
+	});
+});
+
 router.get('/activity/:id/urls', checkAuth, getActivity, function(req, res){
 	var base = req.protocol + '://' + req.get('host');
 	var urls={

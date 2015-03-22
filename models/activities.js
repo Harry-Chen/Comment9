@@ -22,6 +22,7 @@ var activitySchema = mongoose.Schema({
     	sendingToken: { type: String, index: true, unique: true},
     	auditToken: { type: String, index: true, unique: true},
     },
+    forbiddenWordList: [String],
 });
 
 activitySchema.statics.genToken = genToken = function () {
@@ -41,12 +42,12 @@ activitySchema.methods.getWechatConfig = function(){
 }
 
 activitySchema.methods.updateConfig = function(config, callback){
-	var _this = this;
-	_this.config.enableLenLimit = config.enableLenLimit;
-	_this.config.lenLimit = config.lenLimit;
-	_this.config.enableKeywordFilter = config.enableKeywordFilter;
-	_this.config.enableAudit = config.enableAudit;
-	_this.save(callback);
+    var _this = this;
+    _this.config.enableLenLimit = config.enableLenLimit;
+    _this.config.lenLimit = config.lenLimit;
+    _this.config.enableKeywordFilter = config.enableKeywordFilter;
+    _this.config.enableAudit = config.enableAudit;
+    _this.save(callback);
 };
 
 activitySchema.methods.updateWechatConfig = function(config, callback){
@@ -54,6 +55,12 @@ activitySchema.methods.updateWechatConfig = function(config, callback){
     _this.config.wechatParams.wechatToken = config.wechatToken;
     _this.config.wechatParams.wechatAppid = config.wechatAppid;
     _this.config.wechatParams.wechatAESKey = config.wechatAESKey;
+    _this.save(callback);
+};
+
+activitySchema.methods.updateForbiddenWords = function(words, callback){
+    var _this = this;
+    _this.forbiddenWordList = words;
     _this.save(callback);
 };
 
@@ -73,8 +80,11 @@ activitySchema.methods.getEnabledFilters = function(lenFilter, keywordFilter){
             return lenFilter(content, _this.config.lenLimit);
         });
     }
-    if(_this.config.enableKeywordFilter)
-        enabled.push(keywordFilter);
+    if(_this.config.enableKeywordFilter){
+        enabled.push(function(content){
+            return keywordFilter(content, _this.forbiddenWordList);
+        });
+    }
     return enabled;
 }
 

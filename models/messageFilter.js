@@ -18,7 +18,10 @@ function contentLengthFilter (content, length) {
     return content.length <= length;
 }
 
-function keywordFilter (content) {
-    // TODO
+function keywordFilter (content, keywordList) {
+    for (var i = keywordList.length - 1; i >= 0; i--) {
+        if(content.indexOf(keywordList[i])!=-1)
+            return false;
+    };
     return true;
 }

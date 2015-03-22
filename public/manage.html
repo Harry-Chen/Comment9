@@ -19,21 +19,28 @@
 </p>
 
 <h3>---弹幕设置---</h3>
-<p>
+
 <form id="configForm" action="#">
     <input type="checkbox" id="enableLenLimit" name="enableLenLimit">
     <label for="enableLenLimit">自动过滤超长弹幕</label>
     <input type="text" name="lenLimit">
     <br>
     <input type="checkbox" id="enableKeywordFilter" name="enableKeywordFilter">
-    <label for="enableKeywordFilter">自动过滤包含敏感词弹幕</label>
+    <label for="enableKeywordFilter">自动过滤包含<a href="#" id="openKeywordList">禁用词</a>的弹幕</label>
     <br>
     <input type="checkbox" id="enableAudit" name="enableAudit">
     <label for="enableAudit">启用人工审核</label>
     <br>
     <input type="submit" value="保存">
 </form>
-</p>
+
+<br>
+<form action="#" class="hide" id="keywordList">
+    <textarea name="words" cols="20" rows="10"></textarea>
+    <br>
+    <input type="submit" value="更新">
+</form>
+
 <h3>---弹幕测试工具---</h3>
 <button id="testCommentBtn">发送试机弹幕</button>
 <br>

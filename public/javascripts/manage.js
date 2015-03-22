@@ -91,6 +91,40 @@ $().ready(function(){
             e.preventDefault();
         }
     });
+    $('#openKeywordList').click(function(e){
+        var id = $('#activitySelector').val();
+        $.get('manage/activity/'+id+'/forbidden', function(result){
+            if(result.success){
+                $('#keywordList').show().find('textarea').val(result.forbidden.join('\r\n'));
+            }
+        });
+        e.preventDefault();
+    });
+    $('#keywordList').submit(function(e){
+        e.preventDefault();
+        var form = this;
+        var id = $('#activitySelector').val();
+        var words = $(form).find('textarea').val().split(/\r?\n/);
+        words = words.map(function(ele){
+          return ele.trim();
+        });
+        words = words.filter(function(ele){
+          return ele.length>0;
+        });
+        console.log(words);
+        $.ajax({
+          url:'manage/activity/'+id+'/forbidden',
+          type:"POST",
+          data: JSON.stringify(words),
+          contentType:"application/json; charset=utf-8",
+          dataType:"json",
+          success: function(result){
+            if(result.success){
+              $(form).hide();
+            }
+          }
+        });
+    });
     $('#testCommentBtn').click(function(e){
         var testUrl = $('#testUrl').val();
         $.get(testUrl);
