@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "continuation ./bin/www -e -c"
+    "start": "./bin/www.coffee"
   },
   "dependencies": {
     "body-parser": "~1.8.4",
