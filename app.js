@@ -21,11 +21,8 @@ app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
-if (app.get('env') === 'development') {    
-  app.use(logger('dev'));
-}else{
-  app.use(logger('combined'))
-}
+
+app.use(logger('combined'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
