@@ -51,3 +51,10 @@ body{
 #main tr:first-of-type td:first-of-type{
 	font-size: 50px;
 }
+#help{
+  font-size: 12px;
+  position: fixed;
+  left: 0px;
+  bottom: 0px;
+  
+}
