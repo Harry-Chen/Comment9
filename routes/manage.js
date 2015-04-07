@@ -127,6 +127,7 @@ router.get('/activity/:id/urls', checkAuth, getActivity, function(req, res){
 		testUrl: base+"/app/admin/test?token=" + req.activityObj.tokens.auditToken,
 		newCommentApiUrl: base+"/app/new?token=" + req.activityObj.tokens.sendingToken,
 		wechatSvrUrl: base+"/app/wechat/comment/" + req.activityObj.tokens.sendingToken,
+		screenToken: req.activityObj.tokens.screenToken,
 	};
 	res.json({success: true, urls: urls});
 });
