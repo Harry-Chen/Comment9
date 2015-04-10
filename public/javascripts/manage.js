@@ -84,11 +84,14 @@ $().ready(function(){
         if($target.is('button')){
             var reset = $target.attr('data-reset');
             if(reset){
-                var id = $('#activitySelector').val();
-                $.post('manage/activity/'+id+'/reset/'+reset, {}, function(res){
-                    if(res.success)
-                        reloadUrls(id);
-                }, 'json');
+                var ok = confirm("重置后原URL将失效，确认吗？");
+                if(ok){
+                    var id = $('#activitySelector').val();
+                    $.post('manage/activity/'+id+'/reset/'+reset, {}, function(res){
+                        if(res.success)
+                            reloadUrls(id);
+                    }, 'json');
+                }
             }
             var qrcode = $target.attr('data-qrcode');
             if(qrcode){
