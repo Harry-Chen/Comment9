@@ -62,19 +62,5 @@ $().ready(function(){
 		}
 	});
 
-	rolling_text = ["WiFi名称: Young/Young-5G",
-					"WiFi密码: thisisit",
-					'关注微信号"酒井资讯"，发送DM+弹幕内容',
-					"发送短信DM+弹幕内容到13521508053"];
-	id = 0;
-	$("#rolling").text(rolling_text[id]);
-	setInterval(function () {
-		console.log(rolling_text[id]);
-		$("#rolling").animate({'height':0}, function() {
-			$("#rolling").text(rolling_text[id]);
-			$("#rolling").animate({'height': '100%'});
-		});
-		id = (id + 1) % rolling_text.length;
-	}, 10000);
 });
 

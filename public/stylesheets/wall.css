@@ -1,6 +1,6 @@
 body{
 	background-color: #fff;
-	background-image: url(/images/background.jpg);
+	/*background-image: url(/images/background.jpg);*/
 	background-size: auto;
 	color: #333;
 	font-style: normal;
@@ -60,7 +60,7 @@ h1 {
 #content{
 
 	/*max-width: 880px;*/
-	max-width: 90%;
+	/*max-width: 90%;*/
 	width: 100%;
 	/*padding: 50px;*/
 	position: relative;
