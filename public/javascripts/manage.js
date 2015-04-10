@@ -121,11 +121,37 @@ $().ready(function(){
         words = words.filter(function(ele){
           return ele.length>0;
         });
-        console.log(words);
         $.ajax({
           url:'manage/activity/'+id+'/forbidden',
           type:"POST",
           data: JSON.stringify(words),
+          contentType:"application/json; charset=utf-8",
+          dataType:"json",
+          success: function(result){
+            if(result.success){
+              $(form).hide();
+            }
+          }
+        });
+    });
+    $('#openCustomCSS').click(function(e){
+        var id = $('#activitySelector').val();
+        $.get('manage/activity/'+id+'/customcss', function(result){
+            if(result.success){
+                populate($('#customCSS').show(), result);
+            }
+        });
+        e.preventDefault();
+    });
+    $('#customCSS').submit(function(e){
+        e.preventDefault();
+        var form = this;
+        var id = $('#activitySelector').val();
+        var css = $(form).find('textarea').val();
+        $.ajax({
+          url:'manage/activity/'+id+'/customcss',
+          type:"POST",
+          data: JSON.stringify({css: css}),
           contentType:"application/json; charset=utf-8",
           dataType:"json",
           success: function(result){

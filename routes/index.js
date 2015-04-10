@@ -195,5 +195,10 @@ router.get('/screen', checkToken('screen'), function(req, res){
     }
   });
 });
+router.get('/special/custom.css', checkToken('screen'), function(req, res){
+  res.set('Access-Control-Allow-Origin', '*');
+  res.header("Content-Type", "text/css");
+  res.end(req.activity.getCustomCSS());
+});
 
 module.exports = router;

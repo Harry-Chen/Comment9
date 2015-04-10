@@ -118,6 +118,16 @@ router.post('/activity/:id/forbidden', checkAuth, getActivity, function(req, res
 	});
 });
 
+router.get('/activity/:id/customcss', checkAuth, getActivity, function(req, res){
+	res.json({success: true, customcss: req.activityObj.getCustomCSS()});
+});
+
+router.post('/activity/:id/customcss', checkAuth, getActivity, function(req, res){
+	req.activityObj.updateCustomCSS(req.body.css, function(err){
+		res.json({success: !err});
+	});
+});
+
 router.get('/activity/:id/urls', checkAuth, getActivity, function(req, res){
 	var base = req.protocol + '://' + req.get('host');
 	var urls={

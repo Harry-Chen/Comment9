@@ -16,6 +16,7 @@ var activitySchema = mongoose.Schema({
             wechatAppid: String,
             wechatAESKey: String,
         },
+        customCSS: {type: String, default: ''},
     },
     tokens: {
     	screenToken: { type: String, index: true, unique: true},
@@ -86,6 +87,16 @@ activitySchema.methods.getEnabledFilters = function(lenFilter, keywordFilter){
         });
     }
     return enabled;
+}
+
+activitySchema.methods.getCustomCSS = function(){
+    return this.config.customCSS;
+}
+
+activitySchema.methods.updateCustomCSS = function(css,callback){
+    var _this = this;
+    _this.config.customCSS = css;
+    _this.save(callback);
 }
 
 activitySchema.statics.createActivity = function(owner, name, callback){

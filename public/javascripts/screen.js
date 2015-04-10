@@ -5,7 +5,7 @@ $(window).load(function(){
 			//console.log("hi");
 		});
 	})
-	
+	$('<link rel="stylesheet" type="text/css" href="app/special/custom.css?token='+getUrlParameter('token')+'" />').appendTo("head");
 });
 
 function getUrlParameter(sParam)
