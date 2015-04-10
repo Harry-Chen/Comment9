@@ -83,11 +83,18 @@ $().ready(function(){
         var $target = $(e.target);
         if($target.is('button')){
             var reset = $target.attr('data-reset');
-            var id = $('#activitySelector').val();
-            $.post('manage/activity/'+id+'/reset/'+reset, {}, function(res){
-                if(res.success)
-                    reloadUrls(id);
-            }, 'json');
+            if(reset){
+                var id = $('#activitySelector').val();
+                $.post('manage/activity/'+id+'/reset/'+reset, {}, function(res){
+                    if(res.success)
+                        reloadUrls(id);
+                }, 'json');
+            }
+            var qrcode = $target.attr('data-qrcode');
+            if(qrcode){
+                var url = $('#newCommentApiUrl').val();
+                window.open('qrcode.html?'+encodeURIComponent(url),'_blank','menubar=0,toolbar=0,width=300');
+            }
             e.preventDefault();
         }
     });

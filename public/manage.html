@@ -23,6 +23,7 @@
 <form id="configForm" action="#">
     <input type="checkbox" id="enableLenLimit" name="enableLenLimit">
     <label for="enableLenLimit">自动过滤超长弹幕</label>
+    <label for="lenLimit">长度限制：</label>
     <input type="text" name="lenLimit">
     <br>
     <input type="checkbox" id="enableKeywordFilter" name="enableKeywordFilter">
@@ -62,6 +63,8 @@
     <br>
     <br>
     弹幕发送API：<input type="text" class="url-input" readonly id="newCommentApiUrl" name="newCommentApiUrl">
+    <button data-qrcode='sending_api'>二维码</button>
+    <a href="binary/sms-android-latest.apk">下载短信弹幕APP</a>
     <br>
     微信公众号服务器：<input type="text" class="url-input" readonly id="wechatSvrUrl" name="wechatSvrUrl"><a href="#" id="openWechatSettings">设置公众号参数</a>
     <br>
