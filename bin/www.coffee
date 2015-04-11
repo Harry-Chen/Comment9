@@ -1,6 +1,6 @@
 #!/bin/sh
 ###
-exec continuation $0 -e -c
+NODE_ENV=production exec continuation $0 -e -c
 ###
 "use continuation"
 

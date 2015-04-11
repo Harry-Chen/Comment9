@@ -21,8 +21,12 @@ app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
-
-app.use(logger('combined'));
+var env = process.env.NODE_ENV || 'development';
+if (env === 'development') {    
+  app.use(logger('dev'));
+}else{
+  app.use(logger('combined'))
+}
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -55,7 +59,7 @@ app.use(function(req, res, next) {
 
 // development error handler
 // will print stacktrace
-if (app.get('env') === 'development') {
+if (env === 'development') {
     app.use(function(err, req, res, next) {
         res.status(err.status || 500);
         res.render('error', {
