@@ -9,6 +9,7 @@ body{
 	line-height: 1.4444;
 	font-weight: 400;
 	background: transparent;
+	overflow-y: hidden;
 }
 html,body{
   height: 100%;
