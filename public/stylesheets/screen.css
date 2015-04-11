@@ -52,6 +52,8 @@ div.page-home, #screen {
 	height: 3em;
     vertical-align: middle;
     display: table-cell;
+  
+	text-align: center;
 }
 #screen #pinned > div{
 	background: #FFC000;
