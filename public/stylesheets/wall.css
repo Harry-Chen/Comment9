@@ -33,7 +33,6 @@ h1 {
 	height: 4em;
 	margin: 0 auto 1em;
 	font-size: 18px;
-	text-align: center;
 }
 
 .banner {
@@ -53,6 +52,7 @@ h1 {
 	height: 100%;
 	vertical-align: middle;
 	margin-right: 20px;
+	text-align: center;
 }
 .Sogou {
 	height: 100%;
