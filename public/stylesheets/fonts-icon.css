@@ -1,0 +1,20 @@
+@font-face {
+    font-family: 'Apple Icons';
+    font-style: normal;
+    font-weight: 100;
+    src: url("Apple/AppleIcons-Ultralight.woff") format("woff"), url("Apple/AppleIcons-Ultralight.ttf") format("truetype")
+}
+
+@font-face {
+    font-family: 'Apple Icons';
+    font-style: normal;
+    font-weight: 200;
+    src: url("Apple/AppleIcons-Thin.woff") format("woff"), url("Apple/AppleIcons-Thin.ttf") format("truetype")
+}
+
+@font-face {
+    font-family: 'Apple Icons';
+    font-style: normal;
+    font-weight: 400;
+    src: url("Apple/AppleIcons-Text.woff") format("woff"), url("Apple/AppleIcons-Text.ttf") format("truetype")
+}

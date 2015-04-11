@@ -57,7 +57,7 @@ function waitForWebfonts(fonts, callback) {
 
 
 $(window).load(function(){
-    $('<link rel="stylesheet" type="text/css" href="style/fonts.css" />').appendTo("head").load(function(){
+    $('<link rel="stylesheet" type="text/css" href="stylesheets/fonts.css" />').appendTo("head").load(function(){
         waitForWebfonts(['PingHei','"Myriad Set Pro"'], function(){
             $("<style/>").text('body{font-family: "Myriad Set Pro", "Lucida Grande","PingHei", "Helvetica Neue", "Helvetica", "Arial", "Verdana", "sans-serif";}').appendTo("head");
             //console.log("hi");

@@ -1,5 +1,5 @@
 $(window).load(function(){
-	$('<link rel="stylesheet" type="text/css" href="style/fonts-chinese.css" />').appendTo("head").load(function(){
+	$('<link rel="stylesheet" type="text/css" href="stylesheets/fonts-chinese.css" />').appendTo("head").load(function(){
 		waitForWebfonts(['PingHei','"Myriad Set Pro"'], function(){
 			$("<style/>").text('body{font-family: "Consolas", "Myriad Set Pro", "Lucida Grande", "Microsoft Yahei", "PingHei", "Helvetica Neue", "Helvetica", "Arial", "Verdana", "sans-serif";}').appendTo("head");
 			//console.log("hi");

@@ -1,0 +1,35 @@
+@font-face {
+	font-family:'PingHei';
+	font-style:normal;
+	font-weight:200;
+	src:url("PingHei/PingHei-light.woff") format("woff"), url("PingHei/PingHei-light.ttf") format("truetype");
+	*src:url('');
+	/* Copyright (c) 2000-2008, Changzhou SinoType Technology Co., Ltd.  All rights reserved. */
+}
+
+@font-face {
+	font-family:'PingHei';
+	font-style:normal;
+	font-weight:400;
+	src:url("PingHei/PingHei-text.woff") format("woff"), url("PingHei/PingHei-text.ttf") format("truetype");
+	*src:url('');
+	/* Copyright (c) 2000-2008, Changzhou SinoType Technology Co., Ltd.  All rights reserved. */
+}
+
+@font-face {
+	font-family:'PingHei';
+	font-style:normal;
+	font-weight:600;
+	src:url("PingHei/PingHei-semibold.woff") format("woff"), url("PingHei/PingHei-semibold.ttf") format("truetype");
+	*src:url('');
+	/* Copyright (c) 2000-2008, Changzhou SinoType Technology Co., Ltd.  All rights reserved. */
+}
+
+@font-face {
+	font-family:'PingHei';
+	font-style:normal;
+	font-weight:700;
+	src:url("PingHei/PingHei-bold.woff") format("woff"), url("PingHei/PingHei-bold.ttf") format("truetype");
+	*src:url('');
+	/* Copyright (c) 2000-2008, Changzhou SinoType Technology Co., Ltd.  All rights reserved. */
+}

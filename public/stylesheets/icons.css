@@ -1,0 +1,145 @@
+@charset "utf-8";
+.icon:before, .more:before{
+    display: none;
+    padding-right: 0.3em
+}
+
+.icon:after, .more:after{
+    display: inline-block;
+    padding-left: 0.3em
+}
+
+.icon .icon-htc, .more .icon-htc{
+    padding-left: 0.3em;
+    padding-right: 0.3em
+}
+
+.icon:before, .more:before, .more:after, .icon{
+    font-family: 'Apple Icons';
+    font-style: normal;
+    font-weight: inherit;
+    font-size: 1em;
+    line-height: 1;
+    text-decoration: none;
+    position: relative;
+    z-index: 1
+}
+
+.icon-before:before, .icon-after:after {
+    display: inline-block;
+    position: relative;
+    top: -0.125em
+}
+
+.icon-before:after, .icon-after:brfore{
+    display: none
+}
+
+
+.icon-apple:before, .icon-apple:after {
+    content: ""
+}
+
+.icon-more:before, .more:before, .icon-more:after, .more:after {
+    content: ""
+}
+
+.icon-chevronright:before, .icon-chevronright:after {
+    content: ""
+}
+
+.icon-chevronrightalt:before, .icon-chevronrightalt:after {
+    content: ""
+}
+
+.icon-chevrondown:before, .icon-chevrondown:after {
+    content: ""
+}
+
+.icon-chevrondownalt:before, .icon-chevrondownalt:after {
+    content: ""
+}
+
+.icon-chevronleft:before, .icon-chevronleft:after {
+    content: ""
+}
+
+.icon-chevronleftalt:before, .icon-chevronleftalt:after {
+    content: ""
+}
+
+.icon-chevronup:before, .icon-chevronup:after {
+    content: ""
+}
+
+.icon-chevronupalt:before, .icon-chevronupalt:after {
+    content: ""
+}
+
+.icon-close:before, .icon-close:after {
+    content: ""
+}
+
+.icon-closealt:before, .icon-closealt:after {
+    content: ""
+}
+
+.icon-closeinlinealt:before, .icon-closeinlinealt:after {
+    content: ""
+}
+
+.icon-download:before, .icon-download:after {
+    content: ""
+}
+
+.icon-downloadalt:before, .icon-downloadalt:after {
+    content: ""
+}
+
+.icon-external:before, .icon-external:after {
+    content: ""
+}
+
+.icon-info:before, .icon-info:after {
+    content: ""
+}
+
+.icon-list:before, .icon-list:after {
+    content: ""
+}
+
+.icon-paddledown:before, .icon-paddledown:after {
+    content: ""
+}
+
+.icon-paddleleft:before, .icon-paddleleft:after {
+    content: ""
+}
+
+.icon-paddleright:before, .breadcrumbs-list>li:before, .icon-paddleright:after, .breadcrumbs-list>li:after {
+    content: ""
+}
+
+.icon-paddleup:before, .icon-paddleup:after {
+    content: ""
+}
+
+.icon-pause:before, .icon-pause:after {
+    content: ""
+}
+
+.icon-play:before, .icon-play:after {
+    content: ""
+}
+
+.icon-playalt:before, .icon-playalt:after {
+    content: ""
+}
+
+.icon-replay:before, .icon-replay:after {
+    content: ""
+}
+
+.icon-zoom:before, .icon-zoom:after {
+    content: ""
+}
