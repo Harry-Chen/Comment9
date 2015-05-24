@@ -32,7 +32,7 @@ $(function getOne(){
 						   .append($("<td />").text("drop").addClass("no").click(function(){
 								$(this).parent().remove();
 						   }))
-						   .prependTo($("#main"));
+						   .appendTo($("#main"));
 				$(window).scrollTop(0);
 				setTimeout(getOne, Math.random() * 10);
 			}else{

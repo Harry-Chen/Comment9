@@ -7,6 +7,7 @@ module.exports.filter = function (activity, messgaeContent) {
         contentLengthFilter,
         keywordFilter
         );
+    if(!messgaeContent)console.error(messgaeContent);
     for (var i = 0; i < filters.length; i++) {
         if(!(filters[i])(messgaeContent))
             return -1;
