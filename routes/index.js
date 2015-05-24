@@ -60,7 +60,8 @@ function pushToAuditors (id, content, aid) {
 
 //接到请求，存入messages
 function postOne(req, res, msg){
-  console.log(msg);
+  if(!msg)
+    return;
   counter("messages", function(err, id){
     if(err){
       console.error(err);
