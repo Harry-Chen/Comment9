@@ -77,8 +77,8 @@ function newActivity()
 }
 
 $().ready(function(){
-    $('#keywordList').hide();
-    reloadActivities();
+
+	reloadActivities();
 
     $('#logoutBtn').click(function(e){
         $.get('manage/logout', function(res){

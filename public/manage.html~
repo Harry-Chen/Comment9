@@ -65,7 +65,7 @@
 		<input type="checkbox" id="enableLenLimit" name="enableLenLimit">
 		<label for="enableLenLimit">自动过滤超长弹幕</label>
 		<label for="lenLimit">长度限制：</label>
-		<input type="text" name="lenLimit" value="0"  class="form-control">
+		<input type="text" name="lenLimit" value="0" disabled="disabled" class="form-control">
 		<br>
 		<input type="checkbox" id="enableKeywordFilter" name="enableKeywordFilter">
 		<label for="enableKeywordFilter">自动过滤包含<a href="#" id="openKeywordList">禁用词</a>的弹幕</label>
