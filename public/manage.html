@@ -133,11 +133,12 @@
 
 
 <!-- url -->
+
+<form id="urlForm">
     <div class="container" id="danmakuReview">
       <div class="jumbotron">
 	<h3>Review Danmaku</h3>
 	<p>如果你不是审核君, 则你不必在意这部分的内容.</p>
-	<form id="urlForm">
 		<div class="form-group">
 			<div class="input-group">
 				<span class="input-group-addon">审核页地址</span>
@@ -167,14 +168,18 @@
 				<span class="input-group-addon">弹幕 Token</span>
 				<input type="text" readonly id="screenToken" name="screenToken" class="form-control">
 			</div>
-			<span class="help-block">如果你是审核君, 请点击下面进入审核页面. 如果进入不了, 请点击下侧的重置按钮. </span>
-			<span class="help-block">審査画面に入る場合、下のボタンを押してください。入らなければ、下側のリセットボタンを押して、もう一度やり直してください。</span>
+			<span class="help-block">如果你是弹幕墙配置君, 请点击下面进入弹幕墙. 如果进入不了, 请点击下侧的重置按钮. </span>
+			<a class="btn btn-primary" role="button" href="javascript:window.location.href= $('#wallUrl').val()"> 进入弹幕墙 » </a>
 			<button class="btn btn-warning" data-reset="screen">重置弹幕显示地址</button>
 			<button class="btn btn-primary" id="openCustomCSS">自定义CSS</button>
 		</div>
-
-
-
+      </div>
+    </div>
+		
+    <div class="container" id="danmakuWeixin">
+      <div class="jumbotron">
+	<h3>Weixin Danmaku</h3>
+	<p>如果你不是弹幕墙配置君, 则你不必在意这部分的内容.</p>
 		<div class="form-group">
 			<div class="input-group">
 				<span class="input-group-addon">弹幕发送API</span>
@@ -194,17 +199,22 @@
 		</div>
 		
 		<input type="hidden" name="testUrl" id="testUrl">
+      </div>
+    </div>
+</form>
+
+
+
+    <div class="container" id="danmakuWallCSS">
+      <div class="jumbotron">
+	<h3>Danmaku Wall CSS Setting</h3>
+	<p>如果你不是弹幕墙配置君, 则你不必在意这部分的内容.</p>
+	<form action="#" id="customCSS">
+	    <div class="form-group"> <textarea name="customcss" class="form-control" cols="20" rows="10"></textarea></div>
+	    <input type="submit" class="btn btn-wide btn-primary mrm" value="更新">
 	</form>
       </div>
     </div>
-
-
-
-<form action="#" class="hide" id="customCSS">
-    <textarea name="customcss" cols="20" rows="10"></textarea>
-    <br>
-    <input type="submit" value="更新">
-</form>
 
 <form action="#" class="hide" id="wechatSettings">
     Appid <input type="text" name="wechatAppid"><br>

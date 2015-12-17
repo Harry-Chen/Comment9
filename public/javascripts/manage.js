@@ -97,6 +97,7 @@ function reloadBoard(){
         $('#danmakuTool').show();
         $('#danmakuReview').show();
         $('#danmakuWall').show();
+        $('#danmakuWeixin').show();
     }
     else
     {
@@ -105,8 +106,8 @@ function reloadBoard(){
         $('#danmakuTool').hide();
         $('#danmakuReview').hide();
         $('#danmakuWall').hide();
-    }    
-
+        $('#danmakuWeixin').hide();
+    }
 }
 
 // 整体重新载入
@@ -148,6 +149,9 @@ $().ready(function(){
     
     
     $('#keywordBoard').hide();
+    $('#danmakuWallCSS').hide();
+
+
 
     $('#logoutBtn').click(function(e){
         $.get('manage/logout', function(res){
@@ -225,7 +229,7 @@ $().ready(function(){
         var id = activityId;
         $.get('manage/activity/'+id+'/customcss', function(result){
             if(result.success){
-                populate($('#customCSS').show(), result);
+                populate($('#danmakuWallCSS').show(), result);
             }
         });
         e.preventDefault();
@@ -244,7 +248,7 @@ $().ready(function(){
           dataType:"json",
           success: function(result){
             if(result.success){
-              $(form).hide();
+              $('#danmakuWallCSS').hide();
             }
           }
         });
