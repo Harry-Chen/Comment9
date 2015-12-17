@@ -32,9 +32,6 @@ function getActivity (req, res, next) {
 
 router.post('/login', function(req, res){ 
 	var post = req.body;
-	console.log(post);
-	console.log(post.user);
-	console.log(post.password);
 	User.userLogin(post.user, post.password, function(err, success, uid){
 		if(err){
 			res.status(500).end();
