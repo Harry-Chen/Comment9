@@ -145,6 +145,8 @@
 				<input type="text" readonly id="auditUrl" name="auditUrl" class="form-control">
 			</div>
 			<span class="help-block">如果你是审核君, 请点击下面的按钮进入审核页面. 如果进入不了, 请点击下侧的重置按钮. </span>
+		</div>
+		<div class="form-group">
           		<a class="btn btn-primary" role="button" href="javascript:window.location.href= $('#auditUrl').val()"> 进入审核画面 » </a>
 			<button class="btn btn-warning" data-reset="audit">重置审核地址</button>
 		</div>
@@ -160,15 +162,21 @@
 				<span class="input-group-addon">弹幕接口地址</span>
 				<input type="text" readonly id="scrUrl" name="scrUrl" class="form-control">
 			</div>
+		</div>
+		<div class="form-group">
 			<div class="input-group">
 				<span class="input-group-addon">状态墙地址</span>
 				<input type="text" readonly id="wallUrl" name="wallUrl" class="form-control">
 			</div>
+		</div>
+		<div class="form-group">
 			<div class="input-group">
 				<span class="input-group-addon">弹幕 Token</span>
 				<input type="text" readonly id="screenToken" name="screenToken" class="form-control">
 			</div>
 			<span class="help-block">如果你是弹幕墙配置君, 请点击下面进入弹幕墙. 如果进入不了, 请点击下侧的重置按钮. </span>
+		</div>
+		<div class="form-group">
 			<a class="btn btn-primary" role="button" href="javascript:window.location.href= $('#wallUrl').val()"> 进入弹幕墙 » </a>
 			<button class="btn btn-warning" data-reset="screen">重置弹幕显示地址</button>
 			<button class="btn btn-primary" id="openCustomCSS">自定义CSS</button>
@@ -178,23 +186,28 @@
 		
     <div class="container" id="danmakuWeixin">
       <div class="jumbotron">
-	<h3>Weixin Danmaku</h3>
-	<p>如果你不是弹幕墙配置君, 则你不必在意这部分的内容.</p>
+	<h3>Weixin, SMS Danmaku</h3>
+	<p>如果你不是微信, 短信配置君, 则你不必在意这部分的内容.</p>
 		<div class="form-group">
 			<div class="input-group">
 				<span class="input-group-addon">弹幕发送API</span>
 				<input type="text" readonly id="newCommentApiUrl" name="newCommentApiUrl" class="form-control">
+
+				<span class="input-group-btn">
+				<button class="btn btn-default" data-qrcode='sending_api'> 获取二维码 </button>
+				</span>
 			</div>
+		</div>
+		<div class="form-group">
 			<div class="input-group">
 				<span class="input-group-addon">微信公众号服务器</span>
-				<input type="text" readonly readonly id="wechatSvrUrl" name="wechatSvrUrl">
+				<input type="text" readonly readonly id="wechatSvrUrl" name="wechatSvrUrl" class="form-control">
 			</div>
 
-			<span class="help-block">如果你是审核君, 请点击下面进入审核页面. 如果进入不了, 请点击下侧的重置按钮. </span>
-			<span class="help-block">審査画面に入る場合、下のボタンを押してください。入らなければ、下側のリセットボタンを押して、もう一度やり直してください。</span>
+		</div>
+		<div class="form-group">
 			<button class="btn btn-warning" data-reset="sending">重置发送地址</button>
-			<button class="btn btn-primary" data-qrcode='sending_api'>二维码</button>
-			<button class="btn btn-primary" href="binary/sms-android-latest.apk">下载短信弹幕APP</button>
+			<a class="btn btn-primary" href="binary/sms-android-latest.apk">下载短信弹幕APP</a>
 			<button class="btn btn-primary" id="openWechatSettings">设置公众号参数</button>
 		</div>
 		
@@ -216,12 +229,36 @@
       </div>
     </div>
 
-<form action="#" class="hide" id="wechatSettings">
-    Appid <input type="text" name="wechatAppid"><br>
-    Token <input type="text" name="wechatToken"><br>
-    EncodingAESKey <input type="text" name="wechatAESKey"><br>
-    <input type="submit">
-</form>
+
+
+    <div class="container" id="danmakuWechatSettingBoard">
+      <div class="jumbotron">
+	<h3>Danmaku Wechat Setting</h3>
+	<p>如果你不是微信, 短信配置君, 则你不必在意这部分的内容.</p>
+	<form action="#" id="wechatSettings">
+		<div class="form-group">
+			<div class="input-group">
+				<span class="input-group-addon">Appid</span>
+				<input type="text" id="wechatAppid" name="wechatAppid" class="form-control">
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="input-group">
+				<span class="input-group-addon">Token</span>
+				<input type="text" id="wechatToken" name="wechatToken" class="form-control">
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="input-group">
+				<span class="input-group-addon">EncodingAESKey</span>
+				<input type="text" id="wechatAESKey" name="wechatAESKey" class="form-control">
+			</div>
+		</div>
+		<input type="submit" class="btn btn-wide btn-primary mrm">
+	</form>
+      </div>
+    </div>
+
 
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

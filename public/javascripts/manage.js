@@ -150,6 +150,7 @@ $().ready(function(){
     
     $('#keywordBoard').hide();
     $('#danmakuWallCSS').hide();
+    $('#danmakuWechatSettingBoard').hide();
 
 
 
@@ -277,7 +278,7 @@ $().ready(function(){
         var id = activityId;
         $.get('manage/activity/'+id+'/wechat', function(result){
             if(result.success){
-                populate($('#wechatSettings').show(), result.wechat);
+                populate($('#danmakuWechatSettingBoard').show(), result.wechat);
             }
         });
         e.preventDefault();
@@ -289,7 +290,7 @@ $().ready(function(){
         var form = this;
         $.post('manage/activity/'+id+'/wechat', $(form).serialize(), function(result){
             if(result.success){
-                $(form).hide();
+                $('#danmakuWechatSettingBoard').hide();
             }
         }, 'json');
     });
