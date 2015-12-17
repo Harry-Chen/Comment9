@@ -95,14 +95,16 @@ function reloadBoard(){
         $('#welcomeBoard').hide();
         $('#settingBoard').show();
         $('#danmakuTool').show();
-        $('#danmakuURL').show();
+        $('#danmakuReview').show();
+        $('#danmakuWall').show();
     }
     else
     {
         $('#welcomeBoard').show();
         $('#settingBoard').hide();
         $('#danmakuTool').hide();
-        $('#danmakuURL').hide();
+        $('#danmakuReview').hide();
+        $('#danmakuWall').hide();
     }    
 
 }
