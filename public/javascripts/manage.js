@@ -94,11 +94,15 @@ function reloadBoard(){
     {
         $('#welcomeBoard').hide();
         $('#settingBoard').show();
+        $('#danmakuTool').show();
+        $('#danmakuURL').show();
     }
     else
     {
         $('#welcomeBoard').show();
         $('#settingBoard').hide();
+        $('#danmakuTool').hide();
+        $('#danmakuURL').hide();
     }    
 
 }
@@ -141,7 +145,7 @@ $().ready(function(){
     
     
     
-    $('#keywordList').hide();
+    $('#keywordBoard').hide();
 
     $('#logoutBtn').click(function(e){
         $.get('manage/logout', function(res){
@@ -184,7 +188,7 @@ $().ready(function(){
         var id = activityId;
         $.get('manage/activity/'+id+'/forbidden', function(result){
             if(result.success){
-                $('#keywordList').show().find('textarea').val(result.forbidden.join('\r\n'));
+                $('#keywordBoard').show().find('textarea').val(result.forbidden.join('\r\n'));
             }
         });
         e.preventDefault();
@@ -209,7 +213,7 @@ $().ready(function(){
           dataType:"json",
           success: function(result){
             if(result.success){
-              $(form).hide();
+              $('#keywordBoard').hide();
             }
           }
         });
