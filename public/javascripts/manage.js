@@ -1,5 +1,6 @@
-var activityId;
+var activityId = null;
 
+// 填充表单
 function populate($frm, data) {
     $.each(data, function(key, value){
         var $elem = $frm.find('[name='+key+']');
@@ -10,54 +11,92 @@ function populate($frm, data) {
     });
 }
 
+// 重载入活动列表,整理菜单
 function reloadActivities () {
     var $slt = $('#activitySelector');
-    $slt.html('<li class="divider"></li>\
-                <li class="dropdown-header">MANAGEMENT</li>\
-                <li><a href="javascript:newActivity()">Add An Activity</a></li>');
+    $slt.html('');
+    
+    var $del = $('#activityDeleteSelector');
+    $del.html('');
 
+    reloadMenuLabel(null);
+    
     $.getJSON('manage/activities', function(result){
         if(result.success){
             $.each(result.activities, function() {
-		var $a = $("<a />").attr("href", "javascript:reload(\"" + this._id + "\");void(0);")
-			.text(this.name);
-
-		$slt.prepend($("<li />").wrapInner($a));
-		
-		var $b = $("<a />").attr("href", "javascript:deleteActivity(\"" + this._id + "\");void(0);")
-			.text("Delete: " + this.name);
-		$slt.append($("<li />").wrapInner($b));
+                // 插入
+                var $a = $("<a />").attr("href", "javascript:reload(\"" + this._id + "\", \"" + this.name + "\");void(0);")
+                        .text(this.name);
+                $slt.prepend($a);
+                
+                if(this._id == activityId)
+                {
+                        reloadMenuLabel(this.name);
+                }
+                
+                // 删除
+                var $b = $("<a />").attr("href", "javascript:deleteActivity(\"" + this._id + "\");void(0);")
+                        .text("Delete: " + this.name);
+                $del.prepend($b);
             });
+            
             $slt.trigger('change');
+            $del.trigger('change');
         }
     });
 }
 
-function reloadActivityConfig (id) {
-    $.getJSON('manage/activity/'+id+'/config', function(result){
+
+// 更改菜单标签.
+function reloadMenuLabel(name)
+{
+    var $label = $('#activityMenuLabel');
+    if(name != null)
+    {
+        $label.html(': ' + name);
+    }
+    else
+    {
+        $label.html('');
+    }
+    
+    $label.trigger('change');
+}
+
+// 载入配置文件
+// GET /manage/activity/xxxxxxxxxx/config
+function reloadActivityConfig () {
+    $.getJSON('manage/activity/'　+　activityId　+　'/config', function(result){
         if(result.success){
             populate($('#configForm'), result.config);
         }
     });
 }
 
-function reloadUrls(id) {
-    $.getJSON('manage/activity/'+id+'/urls', function(result){
+// 载入配置的 URL 
+// GET /manage/activity/xxxxxxxxxx/config
+function reloadUrls() {
+    $.getJSON('manage/activity/'　+　activityId　+　'/urls', function(result){
         if(result.success){
             populate($('#urlForm'), result.urls);
         }
     });
 }
 
-function reload(id) {
+// 整体重新载入
+function reload(id, name) {
     activityId = id;
-    reloadActivityConfig(activityId);
-    reloadUrls(activityId);
+    
+    reloadMenuLabel(name);
+    reloadActivityConfig();
+    reloadUrls();
+    
 }
 
 function deleteActivity(id) {
-	var ok = confirm("确认删除活动？");
+        var ok = confirm("确认删除活动？");
         if(ok){
+            if(activityId == id) activityId = null;
             $.post('manage/activity/'+id+'/delete', {}, function(res){
                 reloadActivities();
             });
@@ -67,7 +106,7 @@ function deleteActivity(id) {
 
 function newActivity()
 {
-	var name = prompt("活动名称", "33届学生节");
+        var name = prompt("活动名称", "33届学生节");
         if(name != null){
             $.post('manage/activity/new', {name: name}, function(res){
                 reloadActivities();
@@ -77,8 +116,13 @@ function newActivity()
 }
 
 $().ready(function(){
-    $('#keywordList').hide();
+    
+    activityId = null;
     reloadActivities();
+    
+    
+    
+    $('#keywordList').hide();
 
     $('#logoutBtn').click(function(e){
         $.get('manage/logout', function(res){
@@ -126,6 +170,7 @@ $().ready(function(){
         });
         e.preventDefault();
     });
+    
     $('#keywordList').submit(function(e){
         e.preventDefault();
         var form = this;
@@ -150,6 +195,7 @@ $().ready(function(){
           }
         });
     });
+    
     $('#openCustomCSS').click(function(e){
         var id = activityId;
         $.get('manage/activity/'+id+'/customcss', function(result){
@@ -159,6 +205,7 @@ $().ready(function(){
         });
         e.preventDefault();
     });
+    
     $('#customCSS').submit(function(e){
         e.preventDefault();
         var form = this;
@@ -177,10 +224,12 @@ $().ready(function(){
           }
         });
     });
+    
     $('#testCommentBtn').click(function(e){
         var testUrl = $('#testUrl').val();
         $.get(testUrl);
     });
+    
     $('#manualCommentBtn').click(function(e){
         var content = $('#manualCommentContent').val();
         var newCommentApiUrl = $('#newCommentApiUrl').val();
@@ -194,6 +243,7 @@ $().ready(function(){
           }
         });
     });
+    
     $('#openWechatSettings').click(function(e){
         var id = activityId;
         $.get('manage/activity/'+id+'/wechat', function(result){
@@ -203,6 +253,7 @@ $().ready(function(){
         });
         e.preventDefault();
     });
+    
     $('#wechatSettings').submit(function(e){
         e.preventDefault();
         var id = activityId;
