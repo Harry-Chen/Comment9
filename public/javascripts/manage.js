@@ -65,22 +65,42 @@ function reloadMenuLabel(name)
 
 // 载入配置文件
 // GET /manage/activity/xxxxxxxxxx/config
-function reloadActivityConfig () {
-    $.getJSON('manage/activity/'　+　activityId　+　'/config', function(result){
-        if(result.success){
-            populate($('#configForm'), result.config);
-        }
-    });
+function reloadActivityConfig() {
+    if(activityId != null)
+    {
+        $.getJSON('manage/activity/'　+　activityId　+　'/config', function(result){
+            if(result.success){
+                populate($('#configForm'), result.config);
+            }
+        });
+    }
 }
 
 // 载入配置的 URL 
 // GET /manage/activity/xxxxxxxxxx/config
 function reloadUrls() {
-    $.getJSON('manage/activity/'　+　activityId　+　'/urls', function(result){
-        if(result.success){
-            populate($('#urlForm'), result.urls);
-        }
-    });
+    if(activityId != null)
+    {
+        $.getJSON('manage/activity/'　+　activityId　+　'/urls', function(result){
+            if(result.success){
+                populate($('#urlForm'), result.urls);
+            }
+        });
+    }
+}
+
+function reloadBoard(){
+    if(activityId != null)
+    {
+        $('#welcomeBoard').hide();
+        $('#settingBoard').show();
+    }
+    else
+    {
+        $('#welcomeBoard').show();
+        $('#settingBoard').hide();
+    }    
+
 }
 
 // 整体重新载入
@@ -90,13 +110,13 @@ function reload(id, name) {
     reloadMenuLabel(name);
     reloadActivityConfig();
     reloadUrls();
-    
+    reloadBoard();
 }
 
 function deleteActivity(id) {
         var ok = confirm("确认删除活动？");
         if(ok){
-            if(activityId == id) activityId = null;
+            if(activityId == id) reload(null, null);
             $.post('manage/activity/'+id+'/delete', {}, function(res){
                 reloadActivities();
             });
@@ -116,8 +136,7 @@ function newActivity()
 }
 
 $().ready(function(){
-    
-    activityId = null;
+    reload(null, null);
     reloadActivities();
     
     
