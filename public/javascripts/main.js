@@ -19,20 +19,34 @@ $(function getOne(){
 		$.getJSON("app/admin/fetch?token="+getUrlParameter('token'), null, function(data){
 			$("#err").hide();
 			if(data.id !== undefined){
-				$("<tr />").append($("<td />").text(data.m))
-						   .append($("<td />").text("approve").addClass("yes").click(function(e,shiftKey){
-								var thisTr = $(this).parent().remove().appendTo("#toApprove");
-								thisTr.children().unbind("click").slice(1).remove();
-								//$("#toApproveContainer").scrollTop($("#toApprove").height() - $("#toApproveContainer").height());
-								$.get("app/admin/approve/" + data.id + "?s=" + Number(shiftKey || e.shiftKey) + "&token=" + getUrlParameter('token'), function(){
-									thisTr.remove();
-									thisTr = undefined;
-								});
-						   }))
-						   .append($("<td />").text("drop").addClass("no").click(function(){
-								$(this).parent().remove();
-						   }))
-						   .appendTo($("#main"));
+				var $buttonAccept = $("<a />").attr("href", "#").text("Approve").addClass("btn btn-default btn-success");
+				var $buttonReject = $("<a />").attr("href", "#").text("Drop").addClass("btn btn-default btn-danger");
+				
+				$buttonAccept.click(function(e,shiftKey){
+					var thisTr = $(this).parent().parent().parent().remove().appendTo("#toApprove");
+					thisTr.children().unbind("click").slice(1).remove();
+					//$("#toApproveContainer").scrollTop($("#toApprove").height() - $("#toApproveContainer").height());
+								
+					$.get("app/admin/approve/" + data.id + "?s=" + Number(shiftKey || e.shiftKey) + "&token=" + getUrlParameter('token'), function(){
+						thisTr.remove();
+						thisTr = undefined;
+					});
+				});
+				
+				$buttonReject.click(function(){
+					$(this).parent().parent().parent().remove();
+				});
+
+				var $label = $("<label />").addClass("col-sm-6").text(data.m);
+				var $spanButton = $("<span />").addClass("btn-group btn-group-justified").wrapInner($buttonAccept);
+				$spanButton.append($buttonReject)
+				
+				var $divButton = $("<div />").addClass("col-sm-4").wrapInner($spanButton);
+
+				var $div = $("<div />").addClass("form-group").wrapInner($label)
+				$div.append($divButton);
+				
+				$div.appendTo($("#main"));
 				$(window).scrollTop(0);
 				setTimeout(getOne, Math.random() * 10);
 			}else{
@@ -62,22 +76,21 @@ $(function(){
 		$(window).scrollTop(0);
 	});
 	$("body").keydown(function(e){
-	
 		//console.log("down: " + e.which);
 		if(e.keyCode == 16){
-			$(".yes").addClass('star');
+			$(".btn-success").removeClass("btn-success").addClass('btn btn-warning');
 		}
 	});
 	$("body").keyup(function(e){
 		//console.log("up: " + e.which);
 		if(e.keyCode == 16){
-			$(".yes").removeClass('star');
+			$(".btn-warning").removeClass("btn-warning").addClass('btn btn-success');
 		}else if(e.keyCode == 80){
 			paused = !paused;
 			$("#mask").toggle();
 			e.preventDefault();
 		}else if(e.keyCode == 70){
-			$("body")[0].webkitRequestFullScreen(0);
+			$("body")[0].webkitRequestFullscreen(0);
 		}
 	});
 	document.body.onwebkitfullscreenerror=function(){console.log(arguments)};
