@@ -48,8 +48,15 @@
 body{
 	overflow-y: hidden;
 }
-#main tr:first-of-type td:first-of-type{
-	font-size: 50px;
+#main div{
+	font-size: 20px;
+}
+#main div label{
+	color: rgba(255, 255, 255, 0.3);
+	font-size: 20px;
+}
+#main div:first-of-type label:first-of-type{
+	color: rgba(255, 255, 255, 1);
 }
 #help{
   position: fixed;

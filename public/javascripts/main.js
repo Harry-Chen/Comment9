@@ -37,7 +37,7 @@ $(function getOne(){
 					$(this).parent().parent().parent().remove();
 				});
 
-				var $label = $("<label />").addClass("col-sm-6").text(data.m);
+				var $label = $("<label />").addClass("col-sm-7").text(data.m);
 				var $spanButton = $("<span />").addClass("btn-group btn-group-justified").wrapInner($buttonAccept);
 				$spanButton.append($buttonReject)
 				
