@@ -2,25 +2,67 @@
 <html>
 	<head>
 		<script src="javascripts/jquery.js" type="application/javascript"></script>
-		<link rel="stylesheet" type="text/css" href="stylesheets/main.css" />
 		<script src="javascripts/main.js" type="application/javascript"></script>
+
+		<!-- css -->
+		<link rel="stylesheet" type="text/css" href="stylesheets/main.css" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<!-- Loading Bootstrap -->
+		<link href="dist/css/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+		<!-- Loading Flat UI -->
+		<link href="dist/css/flat-ui.css" rel="stylesheet">
+		<link href="docs/assets/css/demo.css" rel="stylesheet">
+
+		<link rel="shortcut icon" href="img/favicon.ico">
+
+		<!-- HTML5 shim, for IE6-8 support of HTML5 elements. All other JS at the end of file. -->
+		<!--[if lt IE 9]>
+		  <script src="js/vendor/html5shiv.js"></script>
+		  <script src="js/vendor/respond.min.js"></script>
+		<![endif]-->
 	</head>
-	<table id="main" border=1>
-	</table>
-	<div id="toApproveContainer">
-		<table id="toApprove" border=1>
+	
+	<body class="palette palette palette-belize-hole">
+
+		<table id="main" border=1>
 		</table>
-	</div>
-	<div id="mask">
-	Paused
-	</div>
-	<div id="err">
-	Connection Lost!Retrying...
-	</div>
-	<div id="help">
-	Space/Enter: Approve <br />
-	Backspace/ESC/D: Drop <br />
-	Shift + Approve: Stared Approve <br />
-	P: Pause or Resume <br />
-	</div>
+		<div id="toApproveContainer">
+			<table id="toApprove" border=1>
+			</table>
+		</div>
+
+		<div id="mask">
+			Paused
+		</div>
+
+		<!-- lost conn -->
+		<div class="tooltip fade bottom in" id="err">
+			<div class="tooltip-arrow"></div>
+			<div class="tooltip-inner" id="errText">				
+				Connection Lost!Retrying...
+			</div>
+		</div>
+		
+		<!-- help -->
+		<div class="tooltip fade bottom in" id="help">
+			<div class="tooltip-inner" id="helpText">				
+				<strong>Space/Enter</strong>: Approve <br />
+				<strong>Backspace/ESC/D</strong>: Drop <br />
+				<strong>Shift + Approve</strong>: Stared Approve <br />
+				<strong>P</strong>: Pause or Resume <br />
+			</div>
+		</div>
+
+		
+		<!-- jQuery (necessary for Flat UI's JavaScript plugins) -->
+		<script src="../dist/js/vendor/jquery.min.js"></script>
+		<!-- Include all compiled plugins (below), or include individual files as needed -->
+		<script src="../dist/js/vendor/video.js"></script>
+		<script src="../dist/js/flat-ui.min.js"></script>
+		<script src="../assets/js/prettify.js"></script>
+		<script src="../assets/js/application.js"></script>
+	</body>
 </html>
