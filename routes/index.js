@@ -106,6 +106,8 @@ router.all('/wechat/comment/:token', checkToken('sending'), function(req, res, n
     if(/^[Dd][Mm]/.test(content)){
       postOne(req, res, {m: content.substr(2)});
       res.reply('弹幕发送成功');
+    }else{
+      res.reply();
     }
   });
   return middleware(req, res, next);
