@@ -105,7 +105,7 @@ router.all('/wechat/comment/:token', checkToken('sending'), function(req, res, n
     var content = '';
     try{
       content =  message.Content.toString();
-    catch(e){
+    }catch(e){
     }
     if(/^[Dd][Mm]/.test(content)){
       postOne(req, res, {m: content.substr(2)});
