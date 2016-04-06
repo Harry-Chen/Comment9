@@ -101,9 +101,18 @@ router.all('/wechat/comment/:token', checkToken('sending'), function(req, res, n
   var middleware = wechat(req.activity.getWechatConfig(), function (req, res, next) {
     // 微信输入信息都在req.weixin上
     var message = req.weixin;
-    console.log(message);
-    postOne(req, res, {m: message.Content});
-    res.reply('弹幕发送成功');
+    //console.log(message);
+    var content = '';
+    try{
+      content =  message.Content.toString();
+    }catch(e){
+    }
+    if(/^[Dd][Mm]/.test(content)){
+      postOne(req, res, {m: content.substr(2)});
+      res.reply('弹幕发送成功');
+    }else{
+      res.reply();
+    }
   });
   return middleware(req, res, next);
 });
