@@ -34,7 +34,7 @@ app.use(cookieParser());
 app.use(session({
 	secret: settings.cookieSecrect,
 	store: new MongoStore({
-		db: settings.db
+		url: settings.dbAddr
 	})
 }));
 
