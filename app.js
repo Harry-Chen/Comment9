@@ -42,10 +42,10 @@ app.use('/', function(req, res, next){
 	next();
 });
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(settings.rootPath, express.static(path.join(__dirname, 'public')));
 //app.use('/', routes);
-app.use('/app', routes);
-app.use('/manage', manage);
+app.use(settings.rootPath + '/app', routes);
+app.use(settings.rootPath + '/manage', manage);
 
 
 // catch 404 and forward to error handler
