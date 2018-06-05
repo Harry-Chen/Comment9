@@ -129,7 +129,7 @@ router.post('/activity/:id/customcss', checkAuth, getActivity, function(req, res
 });
 
 router.get('/activity/:id/urls', checkAuth, getActivity, function(req, res){
-	var base = '//' + req.get('host') + '/comment';
+	var base = req.protocol + '//' + req.get('host') + '/comment';
 	var urls={
 		scrUrl: base+"/app/screen?token=" + req.activityObj.tokens.screenToken,
 		wallUrl: base+"/wall.html?token=" + req.activityObj.tokens.screenToken,
