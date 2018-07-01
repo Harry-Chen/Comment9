@@ -33,7 +33,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use(session({
-	secret: settings.cookieSecrect,
+    secret: settings.cookieSecrect,
+    resave: false,
+    saveUninitialized: false,
 	store: new MongoStore({
 		url: settings.dbAddr
 	})
