@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "./bin/www.coffee"
+    "start": "node ./bin/www.js",
+    "start-dev": "env NODE_ENV=developmemnt DEBUG=c9:* node ./bin/www.js"
   },
   "dependencies": {
     "body-parser": "~1.8.4",
