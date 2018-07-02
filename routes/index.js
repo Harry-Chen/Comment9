@@ -206,7 +206,7 @@ router.get('/admin/approve/:id', checkToken('audit'), function(req, res){
 });
 router.get('/admin/test', checkToken('audit'), function(req, res){
   res.end();
-  pushToScreens(Date.now(), "弹幕试机" + Date.now(), false, req.activity.getId());
+  pushToScreens(Date.now(), "弹幕试机" + Date.now(), false, undefined, req.activity.getId());
 });
 router.get('/screen', checkToken('screen'), function(req, res){
   res.set('Access-Control-Allow-Origin', '*');

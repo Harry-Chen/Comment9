@@ -46,10 +46,10 @@ activitySchema.methods.getWechatConfig = function(){
 
 activitySchema.methods.updateConfig = function(config, callback){
     var _this = this;
-    _this.config.enableLenLimit = config.enableLenLimit;
+    _this.config.enableLenLimit = (config.enableLenLimit === "on");
     _this.config.lenLimit = config.lenLimit;
-    _this.config.enableKeywordFilter = config.enableKeywordFilter;
-    _this.config.enableAudit = config.enableAudit;
+    _this.config.enableKeywordFilter = (config.enableKeywordFilter === "on");
+    _this.config.enableAudit = (config.enableAudit === "on");
     _this.save(callback);
 };
 
