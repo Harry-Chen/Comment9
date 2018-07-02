@@ -14,6 +14,7 @@ var activitySchema = mongoose.Schema({
         wechatParams: {
             wechatToken: String,
             wechatAppid: String,
+            wechatAppSecret: String,
             wechatAESKey: String,
         },
         customCSS: {type: String, default: ''},
@@ -38,6 +39,7 @@ activitySchema.methods.getWechatConfig = function(){
     return {
         token: this.config.wechatParams.wechatToken,
         appid: this.config.wechatParams.wechatAppid,
+        appsecret: this.config.wechatParams.wechatAppSecret,
         encodingAESKey: this.config.wechatParams.wechatAESKey
     };
 }
@@ -55,6 +57,7 @@ activitySchema.methods.updateWechatConfig = function(config, callback){
     var _this = this;
     _this.config.wechatParams.wechatToken = config.wechatToken;
     _this.config.wechatParams.wechatAppid = config.wechatAppid;
+    _this.config.wechatParams.wechatAppSecret = config.wechatAppSecret;
     _this.config.wechatParams.wechatAESKey = config.wechatAESKey;
     _this.save(callback);
 };

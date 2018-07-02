@@ -8,6 +8,10 @@ var Activity = require('../models/activities');
 var messageFilter = require('../models/messageFilter');
 var WTF = require('../utils/WTFTree');
 var wechat = require('wechat');
+const debug = require('debug')('c9:routes:index');
+const WeChatAPI = require('wechat-api');
+const fs = require('fs');
+const util = require('util');
 
 var toProcess = new WTF;
 var waitingClients = ClientQueue(Settings.longQueryTimeout);
@@ -97,19 +101,50 @@ function postOne(req, res, msg){
 };
 
 router.all('/wechat/comment/:token', checkToken('sending'), function(req, res, next){
-
-  var middleware = wechat(req.activity.getWechatConfig(), function (req, res, next) {
+  const wechatConfig = req.activity.getWechatConfig();
+  var middleware = wechat(wechatConfig, function (req, res, next) {
     // 微信输入信息都在req.weixin上
     var message = req.weixin;
+    debug("Got wechat message %o", message);
     //console.log(message);
     var content = '';
     try{
       content =  message.Content.toString();
     }catch(e){
     }
-    if(/^[Dd][Mm]/.test(content)){
-      postOne(req, res, {m: content.substr(2)});
+    if (/^[Dd][Mm]/.test(content)) {
+      debug("Sending danmaku %s", content.substr(2));
+      postOne(req, res, { m: content.substr(2) });
       res.reply('弹幕发送成功');
+    } else if(/^[Ss][Qq]/.test(content)){
+      debug("Sending wall %s", content.substr(2));
+      // taken from wechat-api's readme
+      const filename = util.format('access_token_%s.txt', wechatConfig.appid);
+      const api = new WeChatAPI(wechatConfig.appid, wechatConfig.appsecret, function (callback) {
+        // 传入一个获取全局token的方法
+        fs.readFile(filename, 'utf8', function (err, txt) {
+          if (err) {
+            return callback(null, undefined);
+          }
+          debug('Read wechat access token %s', txt);
+          callback(null, JSON.parse(txt));
+        });
+      }, function (token, callback) {
+        // 请将token存储到全局，跨进程、跨机器级别的全局，比如写到数据库、redis等
+        // 这样才能在cluster模式及多机情况下使用，以下为写入到文件的示例
+        debug('Got wechat access token %o', token);
+        fs.writeFile(filename, JSON.stringify(token), callback);
+      });
+
+      api.getUser({ openid: message.FromUserName, lang: 'zh_CN' }, (err, result) => {
+        if (err) {
+          debug('Got error: %o', err);
+          res.reply('上墙发送失败, 请稍后再试');
+        } else {
+          postOne(req, res, { m: content.substr(2) });
+          res.reply('上墙发送成功');
+        }
+      });
     }else{
       res.reply();
     }
