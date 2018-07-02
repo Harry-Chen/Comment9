@@ -145,7 +145,7 @@
 			<span class="help-block">如果你是审核君, 请点击下面的按钮进入审核页面. 如果进入不了, 请点击下侧的重置按钮. </span>
 		</div>
 		<div class="form-group">
-          		<a class="btn btn-primary" role="button" href="javascript:window.location.href= $('#auditUrl').val()"> 进入审核画面 » </a>
+          		<a class="btn btn-primary" role="button" href="javascript:window.open($('#auditUrl').val(), '_blank')"> 进入审核画面 » </a>
 			<button class="btn btn-warning" data-reset="audit">重置审核地址</button>
 		</div>
       </div>
@@ -175,7 +175,7 @@
 			<span class="help-block">如果你是弹幕墙配置君, 请点击下面进入弹幕墙. 如果进入不了, 请点击下侧的重置按钮. </span>
 		</div>
 		<div class="form-group">
-			<a class="btn btn-primary" role="button" href="javascript:window.location.href= $('#wallUrl').val()"> 进入弹幕墙 » </a>
+			<a class="btn btn-primary" role="button" href="javascript:window.open($('#wallUrl').val(),'_blank')"> 进入弹幕墙 » </a>
 			<button class="btn btn-warning" data-reset="screen">重置弹幕显示地址</button>
 			<button class="btn btn-primary" id="openCustomCSS">自定义CSS</button>
 		</div>
@@ -257,7 +257,7 @@
       </div>
     </div>
 
-    <div class="text-center" style="margin-top:50px"> <small> Copyright (c) 2014-2015 SAST</small></div>
+    <div class="text-center" style="margin-top:50px"> <small> Copyright (c) 2014-2018 SAST</small></div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="./dist/js/vendor/jquery.min.js"></script>
