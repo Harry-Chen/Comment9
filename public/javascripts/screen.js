@@ -23,9 +23,16 @@ function getUrlParameter(sParam)
 } 
 $().ready(function(){
 	function addMessage(m){
-		var $newArticle = $("<div />").append($("<article />").append($("<div />").text(m.m)))
-									  .css("height", 0).prependTo(m.s?"#pinned":"#comments")
-									  .animate({
+		var $newArticle = $("<div />").append($("<article />", {class: "item"})
+			.append($("<div>", {
+				class: "headImg",
+				style: "background-image:url("
+					+ (m.headImg || "http://burridgecenter.colorado.edu/html/images/conference/2017_conference/anonymous-head-shot.jpg")
+					+ ")"
+			}))
+			.append($("<div />").text(m.m)))
+			.css("height", 0).prependTo(m.s?"#pinned":"#comments")
+			.animate({
 			'height': "3em"
 		},function(){
 			var limit = 20;

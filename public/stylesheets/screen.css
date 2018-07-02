@@ -54,6 +54,8 @@ div.page-home, #screen {
     display: table-cell;
   
 	text-align: center;
+	overflow: hidden;
+	max-width: 500px;
 }
 #screen #pinned > div{
 	background: #FFC000;

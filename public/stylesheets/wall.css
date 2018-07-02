@@ -135,3 +135,17 @@ h1 {
 .page-home{
 	text-align: center;
 }
+
+.headImg {
+	width:150px;
+	height:150px;
+	border-radius:100%;
+	background-size:cover;
+}
+
+article.item {
+	width: 80%;
+	height: 150px;
+	background: #BDBDBD;
+	border-radius: 30px;
+}
