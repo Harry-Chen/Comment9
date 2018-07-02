@@ -4,7 +4,8 @@ var getSeq = require('./uniqueCounter');
 
 var messageSchema = mongoose.Schema({
     id: {type: Number, index: true},
-    m: String,
+    m: String, // message
+    headImg: String,
     approved: {type: Number, default: 0},
     s: {type: Boolean, default: false},
     received: {type: Date, default: Date.now},

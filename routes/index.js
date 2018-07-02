@@ -12,6 +12,7 @@ const debug = require('debug')('c9:routes:index');
 const WeChatAPI = require('wechat-api');
 const fs = require('fs');
 const util = require('util');
+const WeChatUser = require('../models/wechat_users');
 
 var toProcess = new WTF;
 var waitingClients = ClientQueue(Settings.longQueryTimeout);
@@ -37,12 +38,13 @@ function checkToken (type){
   }
 }
 
-function pushToScreens (approved, content, star, aid) {
+function pushToScreens (approved, content, star, headImg, aid) {
   
   var screen, result = {
     id: approved,
     m: content,
-    s: star
+    s: star,
+    headImg
   };
   while((screen = waitingScreens.getOne(aid)) !== undefined){
     screen.json([result]);
@@ -50,11 +52,11 @@ function pushToScreens (approved, content, star, aid) {
   }
 }
 
-function pushToAuditors (id, content, aid) {
+function pushToAuditors (id, content, headImg, aid) {
   //取出等待的管理员，分配给他
   var c = waitingClients.getOne(aid);
   if(c !== undefined){
-    c.json({"id": id, "m": content});
+    c.json({"id": id, "m": content, headImg});
     c.end();
   }else{ 
     //如果没人在等待，放入队列
@@ -72,7 +74,7 @@ function postOne(req, res, msg){
       res.status(500).end();
       return;
     }else{
-      var msgObj = new Message({id: id, m: msg.m, activity: req.activity.getId()});
+      var msgObj = new Message({id: id, m: msg.m, headImg: msg.headImg, activity: req.activity.getId()});
       //对消息应用自动过滤器
       var state = messageFilter.filter(req.activity, msgObj.m);
       if(state < 0)
@@ -90,9 +92,9 @@ function postOne(req, res, msg){
           res.end();
           //需要人工审核
           if(newM.approved == 0){
-            pushToAuditors(newM.id, newM.m, req.activity.getId());
+            pushToAuditors(newM.id, newM.m, newM.headImg, req.activity.getId());
           }else if(newM.approved > 0){
-            pushToScreens(newM.approved, newM.m, false, req.activity.getId());
+            pushToScreens(newM.approved, newM.m, false, newM.headImg,req.activity.getId());
           }
         }
       });
@@ -106,47 +108,43 @@ router.all('/wechat/comment/:token', checkToken('sending'), function(req, res, n
     // 微信输入信息都在req.weixin上
     var message = req.weixin;
     debug("Got wechat message %o", message);
-    //console.log(message);
-    var content = '';
-    try{
-      content =  message.Content.toString();
-    }catch(e){
-    }
-    if (/^[Dd][Mm]/.test(content)) {
-      debug("Sending danmaku %s", content.substr(2));
-      postOne(req, res, { m: content.substr(2) });
-      res.reply('弹幕发送成功');
-    } else if(/^[Ss][Qq]/.test(content)){
-      debug("Sending wall %s", content.substr(2));
-      // taken from wechat-api's readme
-      const filename = util.format('access_token_%s.txt', wechatConfig.appid);
-      const api = new WeChatAPI(wechatConfig.appid, wechatConfig.appsecret, function (callback) {
-        // 传入一个获取全局token的方法
-        fs.readFile(filename, 'utf8', function (err, txt) {
-          if (err) {
-            return callback(null, undefined);
+    if (message.MsgType == "text") {
+      var content = '';
+      try{
+        content =  message.Content.toString();
+      }catch(e){
+      }
+      if (/^[Dd][Mm]/.test(content)) {
+        debug("Sending danmaku %s", content.substr(2));
+        postOne(req, res, { m: content.substr(2) });
+        res.reply('弹幕发送成功');
+      } else if(/^[Ss][Qq]/.test(content)){
+        debug("Sending wall %s", content.substr(2));
+        (async () => {
+          const user_info = await WeChatUser.getWeChatUser(wechatConfig, message.FromUserName);
+          debug(user_info);
+          if (!user_info) {
+            res.reply(`请先发送头像照片到公众号`);
+          } else {
+            postOne(req, res, { m: content.substr(2), headImg: user_info.headimgurl });
+            res.reply('上墙发送成功');
           }
-          debug('Read wechat access token %s', txt);
-          callback(null, JSON.parse(txt));
-        });
-      }, function (token, callback) {
-        // 请将token存储到全局，跨进程、跨机器级别的全局，比如写到数据库、redis等
-        // 这样才能在cluster模式及多机情况下使用，以下为写入到文件的示例
-        debug('Got wechat access token %o', token);
-        fs.writeFile(filename, JSON.stringify(token), callback);
-      });
-
-      api.getUser({ openid: message.FromUserName, lang: 'zh_CN' }, (err, result) => {
-        if (err) {
-          debug('Got error: %o', err);
+        })().catch((err) => {
+          debug(err);
           res.reply('上墙发送失败, 请稍后再试');
-        } else {
-          postOne(req, res, { m: content.substr(2) });
-          res.reply('上墙发送成功');
-        }
+        });
+      }else{
+        res.reply();
+      }
+    } else if (message.MsgType == "image") {
+      WeChatUser.setHeadImgUrl(wechatConfig, message.FromUserName, message.PicUrl).then(() => {
+        res.reply("头像设置成功");
+      }).catch((err) => {
+          debug(err);
+          res.reply('头像设置失败, 请稍后再试');
       });
-    }else{
-      res.reply();
+    } else {
+      res.reply("不支持此类消息");
     }
   });
   return middleware(req, res, next);
@@ -177,7 +175,8 @@ router.get('/admin/fetch', checkToken('audit'), function(req, res){
       }else{
         result = {
           id: ret[0].id,
-          m: ret[0].m
+          m: ret[0].m,
+          headImg: ret[0].headImg
         };
       }
       res.json(result);
@@ -195,7 +194,7 @@ router.get('/admin/approve/:id', checkToken('audit'), function(req, res){
         if(err){
           console.error(err);
         }else{
-          pushToScreens(m.approved, m.m, m.s, req.activity.getId());
+          pushToScreens(m.approved, m.m, m.s, m.headImg, req.activity.getId());
         }
       });
     }
@@ -233,7 +232,8 @@ router.get('/screen', checkToken('screen'), function(req, res){
         return {
           id: m.approved,
           m : m.m,
-          s : m.s
+          s: m.s,
+          headImg: m.headImg
         };
       }));
       res.end();
