@@ -23,12 +23,13 @@ $(function getOne(){
 				var $buttonReject = $("<a />").attr("href", "#").text("Drop").addClass("btn btn-default btn-danger");
 				
 				$buttonAccept.click(function(e,shiftKey){
-					var thisTr = $(this).parent().parent().parent().remove().appendTo("#toApprove");
+					var thisTr = $(this).parent().parent().parent().remove().prependTo("#toApprove");
+					$(thisTr.children()[0]).removeClass("col-sm-7");
 					thisTr.children().unbind("click").slice(1).remove();
 					//$("#toApproveContainer").scrollTop($("#toApprove").height() - $("#toApproveContainer").height());
 								
 					$.get("app/admin/approve/" + data.id + "?s=" + Number(shiftKey || e.shiftKey) + "&token=" + getUrlParameter('token'), function(){
-						thisTr.remove();
+						// thisTr.remove();
 						thisTr = undefined;
 					});
 				});
