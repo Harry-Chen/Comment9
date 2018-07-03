@@ -137,7 +137,9 @@ router.all('/wechat/comment/:token', checkToken('sending'), function(req, res, n
             res.reply('姓名设置失败, 请稍后再试');
         });
       } else {
-        res.reply('Usage:\n\t发送xm+姓名：设置姓名\n\t发送dm+姓名或者sq+姓名：我要上墙\n\t发送图片：设置头像\n');
+        res.reply('Name:\n\tcomment9 - 酒井人的弹幕及微信墙\n\n' +
+          'Usage: \n\t发送xm + 姓名：设置姓名\n\t发送dm + 姓名或者sq + 姓名：我要上墙\n\t发送图片：设置头像\n\n' +
+          'Made with love of DCSTSAST');
       }
     } else if (message.MsgType == "image") {
       WeChatUser.setHeadImgUrl(wechatConfig, message.FromUserName, message.PicUrl).then(() => {
