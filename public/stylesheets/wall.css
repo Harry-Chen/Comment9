@@ -1,5 +1,5 @@
 /* By Circuit Coder */
-#pinned artical div.headImg,
+#pinned article div.headImg,
 #comments article div.headImg {
 	width: 120px;
 	height: 120px;
@@ -37,7 +37,7 @@
 
 #screen section>div {
 	overflow: visible;
-	padding: 3px 0;
+	padding: 5px 0;
 }
 
 #screen h3 {
