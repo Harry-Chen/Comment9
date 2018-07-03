@@ -114,31 +114,34 @@ router.all('/wechat/comment/:token', checkToken('sending'), function(req, res, n
         content =  message.Content.toString();
       }catch(e){
       }
-      if (/^[Dd][Mm]/.test(content)) {
-        debug("Sending danmaku %s", content.substr(2));
-        postOne(req, res, { m: content.substr(2) });
-        res.reply('弹幕发送成功');
-      } else if(/^[Ss][Qq]/.test(content)){
+      if(/^[Dd][Mm]|[Ss][Qq]/.test(content)){
         debug("Sending wall %s", content.substr(2));
         (async () => {
           const user_info = await WeChatUser.getWeChatUser(wechatConfig, message.FromUserName);
           debug(user_info);
-          if (!user_info) {
-            res.reply(`请先发送头像照片到公众号`);
+          if (!user_info || !user_info.nickname) {
+            res.reply(`请先发送xm+您的姓名到公众号设置您的姓名`);
           } else {
-            postOne(req, res, { m: content.substr(2), headImg: user_info.headimgurl });
+            postOne(req, res, { m: user_info.nickname + ":" + content.substr(2), headImg: user_info.headimgurl });
             res.reply('上墙发送成功');
           }
         })().catch((err) => {
           debug(err);
           res.reply('上墙发送失败, 请稍后再试');
         });
-      }else{
-        res.reply();
+      } else if (/^[Xx][Mm]/.test(content)){
+        WeChatUser.setNickname(wechatConfig, message.FromUserName, content.substr(2)).then(() => {
+          res.reply("姓名设置成功，您还可以发送图片到公众号以设置您的头像");
+        }).catch((err) => {
+            debug(err);
+            res.reply('姓名设置失败, 请稍后再试');
+        });
+      } else {
+        res.reply('Usage:\n\t发送xm+姓名：设置姓名\n\t发送dm+姓名或者sq+姓名：我要上墙\n\t发送图片：设置头像\n');
       }
     } else if (message.MsgType == "image") {
       WeChatUser.setHeadImgUrl(wechatConfig, message.FromUserName, message.PicUrl).then(() => {
-        res.reply("头像设置成功");
+        res.reply("头像设置成功，您还可以发送xm+文字到公众号以设置您的姓名");
       }).catch((err) => {
           debug(err);
           res.reply('头像设置失败, 请稍后再试');

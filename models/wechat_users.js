@@ -35,6 +35,21 @@ class WeChatUserClass {
         return user;
     }
 
+    static async setNickname(wechatConfig, openid, nickname) {
+        let user = await this.findOne({
+            appid: wechatConfig.appid,
+            openid
+        });
+        if (!user) {
+            user = new this();
+            user.openid = openid;
+            user.appid = wechatConfig.appid;
+        }
+        user.nickname = nickname;
+        await user.save();
+        return user;
+    }
+
     /*
     static getRedirectionUrl(wechatConfig) {
         const redirect_uri = `https://${settings.host}${settings.rootPath}/wechat`;
