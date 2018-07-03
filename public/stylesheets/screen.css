@@ -1,16 +1,3 @@
-#pinned, #comments{
-	width: 100%;
-	position: relative;
-}
-
-#pinned{
-	max-height: 320px;
-	overflow: hidden;
-}
-
-#comments{
-	bottom: 0px;
-}
 
 div.page-home, #screen {
 	position: relative;
@@ -30,33 +17,3 @@ div.page-home, #screen {
 	color: #777777;
 }
 
-#screen section > div{
-	margin: 10px;
-	background: rgb(242, 242, 242);
-	background: rgba(242, 242, 242, 0.85);
-	overflow: hidden;
-	
-}
-#pinned>div, #comments>div{
-	height: 3em;
-	width: 70%;
-	left: 15%;
-	position: relative;
-}
-#pinned article, #comments article{
-	/*white-space:nowrap;*/
-	display: table;
-	width: 100%;
-}
-#pinned article div, #comments article div{
-	height: 3em;
-    vertical-align: middle;
-    display: table-cell;
-  
-	text-align: center;
-	overflow: hidden;
-	max-width: 500px;
-}
-#screen #pinned > div{
-	background: #FFC000;
-}

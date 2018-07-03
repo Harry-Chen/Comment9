@@ -1,3 +1,64 @@
+/* By Circuit Coder */
+#pinned artical div.headImg,
+#comments article div.headImg {
+	width: 120px;
+	height: 120px;
+	flex: initial;
+	margin: 15px;
+	box-shadow: rgba(0, 0, 0, .3) 0 4px 12px inset;
+}
+
+#pinned article,
+#comments article {
+	display: flex;
+}
+
+#pinned article div,
+#comments article div {
+	height: auto;
+	vertical-align: initial;
+	display: block;
+}
+
+#pinned article div,
+#comments article div {
+	flex: 1;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: flex;
+	align-items: center;
+}
+
+#comments article,
+#pinned article {
+	border-radius: 5px;
+	box-shadow: rgba(0, 0, 0, .3) 0 4px 12px;
+}
+
+#screen section>div {
+	overflow: visible;
+	padding: 3px 0;
+}
+
+#screen h3 {
+	color: rgba(0, 0, 0, .24);
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 60px;
+}
+
+#screen {
+	padding: 20px;
+	display: fixed;
+}
+
+article.item {
+	background: #CCC;
+}
+
+/* Original */
 body{
 	background-color: #fff;
 	/*background-image: url(/images/background.jpg);*/
@@ -141,11 +202,4 @@ h1 {
 	height:150px;
 	border-radius:100%;
 	background-size:cover;
-}
-
-article.item {
-	width: 80%;
-	height: 150px;
-	background: #BDBDBD;
-	border-radius: 30px;
 }
